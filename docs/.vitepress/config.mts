@@ -19,14 +19,6 @@ export default defineConfig({
     logo: '/logo.svg',
     siteTitle: 'NodeFlare Wiki',
 
-    nav: [
-      { text: '首页', link: '/' },
-      { text: '快速开始', link: '/guide/quick-start' },
-      { text: '使用指南', link: '/guide/config' },
-      { text: '开发指南', link: '/dev/develop' },
-      { text: '常见问题', link: '/faq' }
-    ],
-
     sidebar: [
       {
         text: '快速开始',

@@ -38,4 +38,11 @@ Linux 使用 systemd 时，安装脚本将 Token 直接写入服务单元的 `En
 
 ## 更新
 
-在各平台脚本后加 `--update`（Windows 为 `-Update`）即可：沿用已保存的地址与 Token，校验摘要，失败自动回滚。
+Linux：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent.sh \
+  | sudo sh -s -- --update
+```
+
+更新会沿用已保存的地址与 Token，校验摘要，失败自动回滚。Windows 对应 `-Update`；macOS / FreeBSD 在对应安装脚本后加 `--update` 参数即可。

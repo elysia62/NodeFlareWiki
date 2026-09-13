@@ -51,6 +51,12 @@ Unblock-File "$env:TEMP\nodeflare-install.ps1"
 
 Windows 对应参数为 `-Install` / `-Status` / `-Restart` / `-Uninstall [-Purge]`，卸载流程详见[卸载](/guide/uninstall)。
 
+以上命令针对已下载到本地的 `install.sh`；也可以直接用管道执行，例如查看服务状态：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh | sudo sh -s -- --status
+```
+
 ## 更新
 
 重新运行安装脚本即可，配置数据保留。安装与更新都会校验 Release 摘要，失败时自动回滚到上一版本。

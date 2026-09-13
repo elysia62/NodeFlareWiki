@@ -2,21 +2,32 @@
 
 ## 卸载服务端
 
-保留配置与数据（仅停止并移除服务）：
+保留配置与数据（仅停止并移除服务）。
+
+Linux / macOS：
 
 ```bash
-sudo sh install.sh --uninstall
+curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh | sudo sh -s -- --uninstall
 ```
 
-卸载并删除配置与数据：
+FreeBSD：
+
+```sh
+fetch -qo - https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh | sudo sh -s -- --uninstall
+```
+
+卸载并删除配置与数据：在命令后追加 `--purge`，例如：
 
 ```bash
-sudo sh install.sh --uninstall --purge
+curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh | sudo sh -s -- --uninstall --purge
 ```
 
 Windows PowerShell（管理员）：
 
 ```powershell
+Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.ps1 -OutFile "$env:TEMP\nodeflare-install.ps1"
+Unblock-File "$env:TEMP\nodeflare-install.ps1"
+
 & "$env:TEMP\nodeflare-install.ps1" -Uninstall          # 保留配置与数据
 & "$env:TEMP\nodeflare-install.ps1" -Uninstall -Purge   # 删除配置与数据
 ```
@@ -29,7 +40,7 @@ Windows PowerShell（管理员）：
 
 ## 卸载 Agent
 
-各平台 Agent 安装脚本均支持 `--uninstall` 参数（Windows 为 `-Uninstall`）。以 Linux 为例：
+Linux：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent.sh \
@@ -39,7 +50,9 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
 Windows PowerShell（管理员）：
 
 ```powershell
-& .\install.ps1 -Uninstall
+Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/install.ps1 -OutFile "$env:TEMP\nodeflare-agent-install.ps1"
+Unblock-File "$env:TEMP\nodeflare-agent-install.ps1"
+& "$env:TEMP\nodeflare-agent-install.ps1" -Uninstall
 ```
 
 卸载后节点不再上报，可在管理后台「服务器」页面删除对应节点。Agent 的程序与状态目录见[平台支持与默认目录](/guide/platforms#默认目录)。
