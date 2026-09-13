@@ -14,7 +14,7 @@
 | `turnstile_site_key` / `turnstile_secret_key` | Cloudflare Turnstile 密钥，留空则禁用；可分别保护管理员登录与公开看板 |
 | `session_ttl_hours` | 会话有效期（1–2160 小时），默认 168 |
 | `frontend_dir` / `admin_frontend_dir` | 前端静态资源目录，相对路径按配置文件所在目录解析 |
-| `theme_dir` | 主题解压目录，默认配置目录下的 `themes`，详见[主题定制](/guide/themes) |
+| `theme_dir` | 主题解压目录，默认配置目录下的 `themes`，详见[主题开发](/guide/themes) |
 
 ## 命令行参数
 

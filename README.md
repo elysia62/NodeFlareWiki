@@ -2,7 +2,7 @@
 
 **[在线文档 →](https://elysia62.github.io/NodeFlareWiki/)**
 
-[NodeFlare](https://github.com/elysia62/NodeFlare) 的官方文档，基于 [VitePress](https://vitepress.dev) 构建。
+[NodeFlare](https://github.com/elysia62/NodeFlare) 的官方文档，基于 [VitePress](https://vitepress.dev) 构建，提供简体中文与 English 两个语言版本。
 
 ## 文档目录
 

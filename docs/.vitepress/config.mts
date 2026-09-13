@@ -4,6 +4,76 @@ import { defineConfig } from 'vitepress'
 // CI 会按仓库名注入 BASE_PATH；自定义域名部署时改为 '/' 即可。
 const base = (process.env.BASE_PATH ?? '/NodeFlareWiki/').replace(/\/+$/, '') + '/'
 
+const zhSidebar = [
+  {
+    text: '快速开始',
+    items: [
+      { text: '界面预览', link: '/screenshot' },
+      { text: '安装服务端', link: '/guide/quick-start' },
+      { text: '安装 Agent', link: '/guide/agent' },
+      { text: '平台支持与默认目录', link: '/guide/platforms' },
+      { text: '卸载', link: '/guide/uninstall' }
+    ]
+  },
+  {
+    text: '使用指南',
+    items: [
+      { text: '配置', link: '/guide/config' },
+      { text: '监控口径与采样', link: '/guide/monitoring' },
+      { text: '告警与通知', link: '/guide/alerts' },
+      { text: '数据库与备份', link: '/guide/database' },
+      { text: '反向代理', link: '/guide/proxy' },
+      { text: '主题开发', link: '/guide/themes' }
+    ]
+  },
+  {
+    text: '开发指南',
+    items: [
+      { text: '开发环境', link: '/dev/develop' },
+      { text: '仓库结构', link: '/dev/structure' }
+    ]
+  },
+  {
+    text: '常见问题',
+    items: [{ text: 'FAQ', link: '/faq' }]
+  }
+]
+
+const enSidebar = [
+  {
+    text: 'Getting Started',
+    items: [
+      { text: 'Screenshots', link: '/en/screenshot' },
+      { text: 'Install the Server', link: '/en/guide/quick-start' },
+      { text: 'Install the Agent', link: '/en/guide/agent' },
+      { text: 'Platforms & Paths', link: '/en/guide/platforms' },
+      { text: 'Uninstall', link: '/en/guide/uninstall' }
+    ]
+  },
+  {
+    text: 'Guide',
+    items: [
+      { text: 'Configuration', link: '/en/guide/config' },
+      { text: 'Metrics & Sampling', link: '/en/guide/monitoring' },
+      { text: 'Alerts & Notifications', link: '/en/guide/alerts' },
+      { text: 'Database & Backups', link: '/en/guide/database' },
+      { text: 'Reverse Proxy', link: '/en/guide/proxy' },
+      { text: 'Theme Development', link: '/en/guide/themes' }
+    ]
+  },
+  {
+    text: 'Development',
+    items: [
+      { text: 'Development Setup', link: '/en/dev/develop' },
+      { text: 'Repository Layout', link: '/en/dev/structure' }
+    ]
+  },
+  {
+    text: 'Help',
+    items: [{ text: 'FAQ', link: '/en/faq' }]
+  }
+]
+
 export default defineConfig({
   lang: 'zh-CN',
   title: 'NodeFlare',
@@ -15,77 +85,83 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#11191f' }]
   ],
   lastUpdated: true,
-  themeConfig: {
-    logo: '/logo.svg',
-    siteTitle: 'NodeFlare Wiki',
+  locales: {
+    root: {
+      label: '简体中文',
+      lang: 'zh-CN',
+      themeConfig: {
+        logo: '/logo.svg',
+        siteTitle: 'NodeFlare Wiki',
 
-    sidebar: [
-      {
-        text: '快速开始',
-        items: [
-          { text: '界面预览', link: '/screenshot' },
-          { text: '安装服务端', link: '/guide/quick-start' },
-          { text: '安装 Agent', link: '/guide/agent' },
-          { text: '平台支持与默认目录', link: '/guide/platforms' },
-          { text: '卸载', link: '/guide/uninstall' }
-        ]
-      },
-      {
-        text: '使用指南',
-        items: [
-          { text: '配置', link: '/guide/config' },
-          { text: '监控口径与采样', link: '/guide/monitoring' },
-          { text: '告警与通知', link: '/guide/alerts' },
-          { text: '主题定制', link: '/guide/themes' },
-          { text: '数据库与备份', link: '/guide/database' },
-          { text: '反向代理', link: '/guide/proxy' }
-        ]
-      },
-      {
-        text: '开发指南',
-        items: [
-          { text: '开发环境', link: '/dev/develop' },
-          { text: '仓库结构', link: '/dev/structure' }
-        ]
-      },
-      {
-        text: '常见问题',
-        items: [{ text: 'FAQ', link: '/faq' }]
-      }
-    ],
+        sidebar: zhSidebar,
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/elysia62/NodeFlare' }],
+        socialLinks: [{ icon: 'github', link: 'https://github.com/elysia62/NodeFlare' }],
 
-    search: {
-      provider: 'local',
-      options: {
-        translations: {
-          button: { buttonText: '搜索文档', buttonAriaLabel: '搜索文档' },
-          modal: {
-            noResultsText: '没有找到结果',
-            resetButtonTitle: '清除查询条件',
-            footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' }
+        search: {
+          provider: 'local',
+          options: {
+            translations: {
+              button: { buttonText: '搜索文档', buttonAriaLabel: '搜索文档' },
+              modal: {
+                noResultsText: '没有找到结果',
+                resetButtonTitle: '清除查询条件',
+                footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' }
+              }
+            }
           }
+        },
+
+        outline: { level: 'deep', label: '本页目录' },
+        lastUpdated: { text: '最后更新于' },
+        docFooter: { prev: '上一页', next: '下一页' },
+        sidebarMenuLabel: '菜单',
+        returnToTopLabel: '回到顶部',
+        darkModeSwitchLabel: '外观',
+        lightModeSwitchTitle: '切换到浅色模式',
+        darkModeSwitchTitle: '切换到深色模式',
+        editLink: {
+          pattern: 'https://github.com/elysia62/NodeFlareWiki/edit/main/docs/:path',
+          text: '在 GitHub 上编辑此页'
+        },
+
+        footer: {
+          message: '基于 MIT 许可发布',
+          copyright: 'Copyright © 2026 NodeFlare Contributors'
         }
       }
     },
+    en: {
+      label: 'English',
+      lang: 'en-US',
+      link: '/en/',
+      themeConfig: {
+        logo: '/logo.svg',
+        siteTitle: 'NodeFlare Wiki',
 
-    outline: { level: 'deep', label: '本页目录' },
-    lastUpdated: { text: '最后更新于' },
-    docFooter: { prev: '上一页', next: '下一页' },
-    sidebarMenuLabel: '菜单',
-    returnToTopLabel: '回到顶部',
-    darkModeSwitchLabel: '外观',
-    lightModeSwitchTitle: '切换到浅色模式',
-    darkModeSwitchTitle: '切换到深色模式',
-    editLink: {
-      pattern: 'https://github.com/elysia62/NodeFlareWiki/edit/main/docs/:path',
-      text: '在 GitHub 上编辑此页'
-    },
+        sidebar: enSidebar,
 
-    footer: {
-      message: '基于 MIT 许可发布',
-      copyright: 'Copyright © 2026 NodeFlare Contributors'
+        socialLinks: [{ icon: 'github', link: 'https://github.com/elysia62/NodeFlare' }],
+
+        search: { provider: 'local' },
+
+        outline: { level: 'deep', label: 'On this page' },
+        lastUpdated: { text: 'Last updated' },
+        docFooter: { prev: 'Previous', next: 'Next' },
+        sidebarMenuLabel: 'Menu',
+        returnToTopLabel: 'Back to top',
+        darkModeSwitchLabel: 'Appearance',
+        lightModeSwitchTitle: 'Switch to light theme',
+        darkModeSwitchTitle: 'Switch to dark theme',
+        editLink: {
+          pattern: 'https://github.com/elysia62/NodeFlareWiki/edit/main/docs/:path',
+          text: 'Edit this page on GitHub'
+        },
+
+        footer: {
+          message: 'Released under the MIT License.',
+          copyright: 'Copyright © 2026 NodeFlare Contributors'
+        }
+      }
     }
   }
 })
