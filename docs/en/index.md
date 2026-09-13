@@ -13,6 +13,9 @@ hero:
       text: Get Started
       link: /en/guide/quick-start
     - theme: alt
+      text: Live Demo
+      link: /demo/
+    - theme: alt
       text: FAQ
       link: /en/faq
     - theme: alt

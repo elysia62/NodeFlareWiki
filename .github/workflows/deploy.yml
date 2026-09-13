@@ -35,6 +35,14 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Build demo dashboard
+        run: |
+          cd demo-src
+          bun install --frozen-lockfile
+          VITE_DEMO=true bunx vite build --base="${BASE_PATH}demo/"
+          mkdir -p "$GITHUB_WORKSPACE/docs/public/demo"
+          cp -r dist/* "$GITHUB_WORKSPACE/docs/public/demo/"
+
       - name: Build with VitePress
         run: bun run docs:build
 

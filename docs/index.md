@@ -12,6 +12,9 @@ hero:
       text: 立刻开始
       link: /guide/quick-start
     - theme: alt
+      text: 在线演示
+      link: /demo/
+    - theme: alt
       text: 常见问题
       link: /faq
     - theme: alt
