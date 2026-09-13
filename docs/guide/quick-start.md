@@ -49,7 +49,7 @@ Unblock-File "$env:TEMP\nodeflare-install.ps1"
 | `sudo sh install.sh --uninstall` | 卸载，保留配置和数据 |
 | `sudo sh install.sh --uninstall --purge` | 卸载并删除配置与数据 |
 
-Windows 对应参数为 `-Install` / `-Status` / `-Restart` / `-Uninstall [-Purge]`。
+Windows 对应参数为 `-Install` / `-Status` / `-Restart` / `-Uninstall [-Purge]`，卸载流程详见[卸载](/guide/uninstall)。
 
 ## 更新
 

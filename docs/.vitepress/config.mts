@@ -34,7 +34,8 @@ export default defineConfig({
           { text: '界面预览', link: '/screenshot' },
           { text: '安装服务端', link: '/guide/quick-start' },
           { text: '安装 Agent', link: '/guide/agent' },
-          { text: '平台支持与默认目录', link: '/guide/platforms' }
+          { text: '平台支持与默认目录', link: '/guide/platforms' },
+          { text: '卸载', link: '/guide/uninstall' }
         ]
       },
       {

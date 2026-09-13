@@ -34,6 +34,10 @@
 
 Linux 下文件缓存不计入已用内存、共享内存计入，面板显示的是整机内存，不是 NodeFlare 进程本身的占用，口径见[监控口径与采样](/guide/monitoring)。
 
+## 如何卸载？
+
+服务端用安装脚本 `--uninstall`（保留数据）或 `--uninstall --purge`（删除数据）卸载，Agent 加 `--uninstall` 参数卸载，详见[卸载](/guide/uninstall)。
+
 ## 远程执行命令为什么需要 TOTP？
 
 远程执行属高危操作，必须先启用 TOTP 两步验证；单条命令最长执行 10 分钟，离开页面不会中断。
