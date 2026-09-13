@@ -1,0 +1,31 @@
+# 平台支持与默认目录
+
+## 平台支持
+
+| 角色 | 平台 | 架构 |
+| --- | --- | --- |
+| 服务端 | Linux | x64 / ARM64 |
+| 服务端 | Windows | x64 |
+| 服务端 | macOS | ARM64 |
+| 服务端 | FreeBSD 13+ | x64 / ARM64 |
+| Agent | Linux / Windows / macOS / FreeBSD | 同上（macOS 仅 Apple Silicon） |
+
+安装脚本会自动检测系统服务管理器（systemd / OpenRC / launchd / FreeBSD rc / Windows 计划任务）并注册为开机自启。
+
+## 默认目录
+
+| 平台 | 程序 | 配置与数据 |
+| --- | --- | --- |
+| Linux | `/opt/nodeflare` | `/etc/nodeflare` |
+| Windows | `%ProgramFiles%\NodeFlare` | `%ProgramData%\NodeFlare\Server` |
+| macOS | `/usr/local/libexec/nodeflare` | `/Library/Application Support/NodeFlare/Server` |
+| FreeBSD | `/usr/local/libexec/nodeflare` | `/var/db/nodeflare/server` |
+
+Agent（Linux）：程序位于 `/opt/nodeflare/agent`，配置与状态位于 `/etc/nodeflare/agent`。SQLite 文件位于配置目录下。
+
+## 日志位置
+
+- Linux（systemd）：`journalctl -u nodeflare -f`；Agent 为 `journalctl -u nodeflare-agent -f`
+- Linux（OpenRC）：`rc-service nodeflare status`
+- macOS：`/var/log/nodeflare.log`
+- Windows：`Get-ScheduledTaskInfo -TaskName nodeflare`
