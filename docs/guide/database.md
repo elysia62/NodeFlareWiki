@@ -1,6 +1,6 @@
 # 数据库与备份
 
-NodeFlare 支持 SQLite 与 PostgreSQL 双数据库，两种数据库之间可**在线迁移**。相关操作均在后台「数据库」页面完成。
+NodeFlare 同时支持 SQLite 与 PostgreSQL，两种数据库之间可**在线迁移**。相关操作均在后台「数据库」页面完成。
 
 ## 数据库管理
 
