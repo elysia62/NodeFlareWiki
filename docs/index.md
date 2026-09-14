@@ -12,6 +12,9 @@ hero:
       text: 立刻开始
       link: /guide/quick-start
     - theme: alt
+      text: Docker 部署
+      link: /guide/docker
+    - theme: alt
       text: 在线演示
       link: /demo/
     - theme: alt
@@ -40,4 +43,7 @@ features:
   - icon: 💾
     title: 数据自持
     details: SQLite 与 PostgreSQL 双支持，两者之间可在线迁移；一键备份恢复，历史数据按保留天数自动清理。
+  - icon: 🐳
+    title: 容器部署
+    details: 官方镜像支持 x64 与 ARM64 服务器，一条 docker run 或一份 Compose 文件即可起面板，配置与数据挂载到宿主机持久保存。
 ---

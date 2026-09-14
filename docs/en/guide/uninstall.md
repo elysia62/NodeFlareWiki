@@ -2,6 +2,10 @@
 
 ## Uninstall the Server
 
+::: tip
+For Docker deployments (`docker compose down` / `docker rm -f` and the `data/` directory) see [Docker Deployment](/en/guide/docker#logs-and-uninstall).
+:::
+
 Keep config and data (stops and removes the service only).
 
 Linux / macOS:

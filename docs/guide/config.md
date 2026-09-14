@@ -16,6 +16,10 @@
 | `frontend_dir` / `admin_frontend_dir` | 前端静态资源目录，相对路径按配置文件所在目录解析 |
 | `theme_dir` | 主题解压目录，默认配置目录下的 `themes`，详见[主题开发](/guide/themes) |
 
+::: tip
+Docker 部署时配置文件就是挂载目录下的 `config.toml`，示例见仓库 [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)；其中 `bind_addr` 需保持 `0.0.0.0:2206`，具体填法见 [Docker 部署](/guide/docker#1-准备配置)。
+:::
+
 ## 命令行参数
 
 启动时可用命令行临时覆盖配置：
@@ -30,7 +34,7 @@ nodeflare --config <路径> --bind <地址> --database <URL>
 
 ## 完整示例
 
-以下为 `config.example.toml` 的完整内容（正式安装时配置写入 `/etc/nodeflare/config.toml`，各平台路径见[默认目录](/guide/platforms#默认目录)）：
+以下为 `config.example.toml` 的完整内容（正式安装时配置写入 `/etc/nodeflare/config.toml`，各平台路径见[默认目录](/guide/platforms#默认目录)；Docker 部署使用 [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)）：
 
 ```toml
 # 数据库连接 URL

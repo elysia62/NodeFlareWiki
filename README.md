@@ -6,7 +6,7 @@
 
 ## 文档目录
 
-- [快速开始](https://elysia62.github.io/NodeFlareWiki/guide/quick-start.html)：界面预览、安装服务端 / Agent、平台支持、卸载
+- [快速开始](https://elysia62.github.io/NodeFlareWiki/guide/quick-start.html)：界面预览、安装服务端 / Docker 部署 / Agent、平台支持、卸载
 - [使用指南](https://elysia62.github.io/NodeFlareWiki/guide/config.html)：配置、监控口径、告警、主题、数据库与备份、反向代理
 - [开发指南](https://elysia62.github.io/NodeFlareWiki/dev/develop.html)：本地开发、仓库结构
 - [常见问题](https://elysia62.github.io/NodeFlareWiki/faq.html)

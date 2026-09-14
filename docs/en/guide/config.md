@@ -16,6 +16,10 @@ The config file lives in the platform's [default path](/en/guide/platforms#defau
 | `frontend_dir` / `admin_frontend_dir` | Frontend static asset directories; relative paths resolve against the config file's directory |
 | `theme_dir` | Directory where theme ZIPs are extracted, `themes` inside the config directory by default — see [Theme Development](/en/guide/themes) |
 
+::: tip
+In Docker the config file is simply `config.toml` in the mounted directory; see [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml) in the repository. Keep `bind_addr` at `0.0.0.0:2206` — see [Docker Deployment](/en/guide/docker#1-prepare-the-config).
+:::
+
 ## Command-line Overrides
 
 Command-line flags temporarily override the config file:
@@ -30,7 +34,7 @@ Online migration is disabled when the server is started with `--database`.
 
 ## Full Example
 
-The complete `config.example.toml` (for a production install the config lives at `/etc/nodeflare/config.toml`; paths per platform are listed under [default paths](/en/guide/platforms#default-paths)):
+The complete `config.example.toml` (for a production install the config lives at `/etc/nodeflare/config.toml`; paths per platform are listed under [default paths](/en/guide/platforms#default-paths); Docker deployments use [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)):
 
 ```toml
 # Database connection URL

@@ -13,6 +13,9 @@ hero:
       text: Get Started
       link: /en/guide/quick-start
     - theme: alt
+      text: Docker Deployment
+      link: /en/guide/docker
+    - theme: alt
       text: Live Demo
       link: /demo/
     - theme: alt
@@ -41,4 +44,7 @@ features:
   - icon: 💾
     title: Data Ownership
     details: SQLite and PostgreSQL with online migration between them, one-click backup and restore, and automatic history cleanup by retention days.
+  - icon: 🐳
+    title: Container Ready
+    details: Official images run on x64 and ARM64 servers. Start the panel with one docker run or a Compose file, with config and data persisted on the host.
 ---

@@ -10,6 +10,7 @@ const zhSidebar = [
     items: [
       { text: '界面预览', link: '/screenshot' },
       { text: '安装服务端', link: '/guide/quick-start' },
+      { text: 'Docker 部署', link: '/guide/docker' },
       { text: '安装 Agent', link: '/guide/agent' },
       { text: '平台支持与默认目录', link: '/guide/platforms' },
       { text: '卸载', link: '/guide/uninstall' }
@@ -45,6 +46,7 @@ const enSidebar = [
     items: [
       { text: 'Screenshots', link: '/en/screenshot' },
       { text: 'Install the Server', link: '/en/guide/quick-start' },
+      { text: 'Docker Deployment', link: '/en/guide/docker' },
       { text: 'Install the Agent', link: '/en/guide/agent' },
       { text: 'Platforms & Paths', link: '/en/guide/platforms' },
       { text: 'Uninstall', link: '/en/guide/uninstall' }

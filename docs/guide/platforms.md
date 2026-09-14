@@ -8,9 +8,10 @@
 | 服务端 | Windows | x64 |
 | 服务端 | macOS | ARM64 |
 | 服务端 | FreeBSD 13+ | x64 / ARM64 |
+| 服务端 | Docker | 与宿主机架构一致（x64 / ARM64） |
 | Agent | Linux / Windows / macOS / FreeBSD | 同上（macOS 仅 Apple Silicon） |
 
-安装脚本会自动检测系统服务管理器（systemd / OpenRC / launchd / FreeBSD rc / Windows 计划任务）并注册为开机自启。
+安装脚本会自动检测系统服务管理器（systemd / OpenRC / launchd / FreeBSD rc / Windows 计划任务）并注册为开机自启；Docker 部署则通过镜像与 `restart unless-stopped` 策略实现开机自启，见 [Docker 部署](/guide/docker)。
 
 ## 默认目录
 
@@ -20,8 +21,11 @@
 | Windows | `%ProgramFiles%\NodeFlare` | `%ProgramData%\NodeFlare\Server` |
 | macOS | `/usr/local/libexec/nodeflare` | `/Library/Application Support/NodeFlare/Server` |
 | FreeBSD | `/usr/local/libexec/nodeflare` | `/var/db/nodeflare/server` |
+| Docker | 镜像内已包含 | 容器内 `/etc/nodeflare`，通常挂载到宿主机目录（如 `./data`） |
 
 Agent（Linux）：程序位于 `/opt/nodeflare/agent`，配置与状态位于 `/etc/nodeflare/agent`。SQLite 文件位于配置目录下。
+
+Docker 部署的配置文件就是挂载目录下的 `config.toml`，见 [Docker 部署](/guide/docker#1-准备配置)。
 
 ## 日志位置
 
@@ -29,3 +33,4 @@ Agent（Linux）：程序位于 `/opt/nodeflare/agent`，配置与状态位于 `
 - Linux（OpenRC）：`rc-service nodeflare status`
 - macOS：`/var/log/nodeflare.log`
 - Windows：`Get-ScheduledTaskInfo -TaskName nodeflare`
+- Docker：`docker logs -f nodeflare`

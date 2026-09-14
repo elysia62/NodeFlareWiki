@@ -2,6 +2,10 @@
 
 ## 卸载服务端
 
+::: tip
+Docker 部署的清理方式（`docker compose down` / `docker rm -f` 与 `data/` 目录）见 [Docker 部署](/guide/docker#日志与卸载)。
+:::
+
 保留配置与数据（仅停止并移除系统服务）。
 
 Linux / macOS：

@@ -2,6 +2,10 @@
 
 The install script downloads the latest release automatically and registers a system service (systemd / OpenRC / launchd / FreeBSD rc / Windows scheduled task).
 
+::: tip
+If you don't want the script to touch system services, or you prefer containers, use the official image instead — see [Docker Deployment](/en/guide/docker).
+:::
+
 ## One-line Install
 
 Linux / macOS:
@@ -57,6 +61,27 @@ The commands above run a script already downloaded to disk; you can also pipe it
 curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh | sudo sh -s -- --status
 ```
 
+## Docker Deployment
+
+The official `gxmandppx/nodeflare` image runs on x64 and ARM64 servers and keeps configuration and data in the mounted directory (referred to as `./data` below):
+
+```bash
+mkdir -p data
+curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o data/config.toml
+# edit data/config.toml: set the admin account, leave the rest as-is
+sudo chown -R 10001:10001 data   # the container runs as UID 10001 and needs write access
+
+docker run -d --name nodeflare \
+  --restart unless-stopped \
+  -p 127.0.0.1:2206:2206 \
+  -v "$PWD/data:/etc/nodeflare" \
+  gxmandppx/nodeflare:latest
+```
+
+Then open `http://127.0.0.1:2206/admin/login`; nodes and agents are configured exactly as with a script install. See [Docker Deployment](/en/guide/docker) for the Compose example, updates, and uninstall.
+
 ## Updating
 
 Re-run the install script to update. Config and data are preserved, downloads are verified by checksum, and a failed update automatically rolls back to the previous version.
+
+For Docker deployments see [Docker Deployment](/en/guide/docker#updating).
