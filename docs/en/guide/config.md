@@ -17,7 +17,7 @@ The config file lives in the platform's [default path](/en/guide/platforms#defau
 | `theme_dir` | Directory where theme ZIPs are extracted, `themes` inside the config directory by default — see [Theme Development](/en/guide/themes) |
 
 ::: tip
-In Docker the config file is simply `config.toml` in the mounted directory; keep `bind_addr` at `0.0.0.0:2206` — see [Docker Deployment](/en/guide/docker#prepare-the-config).
+These Docker examples use `/etc/nodeflare/config.toml` on the host, mounted at the same path inside the container. The file must be readable and writable by container user `10001:10001`; keep `bind_addr` at `0.0.0.0:2206` — see [Docker Deployment](/en/guide/docker#prepare-the-config).
 :::
 
 ## Command-line Overrides

@@ -10,7 +10,8 @@ defineProps<{
 </script>
 
 <template>
-  <a class="demo-preview" :href="withBase(href)">
+  <!-- The demo is a standalone app; target bypasses VitePress routing. -->
+  <a class="demo-preview" :href="withBase(href)" target="_self">
     <img :src="withBase(src)" :alt="alt" />
     <span class="demo-preview-badge">▶ {{ badge }}</span>
   </a>

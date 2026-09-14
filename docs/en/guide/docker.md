@@ -1,19 +1,20 @@
 # Docker Deployment
 
-NodeFlare ships an official image, `gxmandppx/nodeflare` ([Docker Hub](https://hub.docker.com/r/gxmandppx/nodeflare)), which runs on x64 and ARM64 servers alike. Configuration and data live in `/etc/nodeflare` inside the container — mount a host directory (referred to as `./data` below) to persist them.
+NodeFlare provides the official `gxmandppx/nodeflare` image ([Docker Hub](https://hub.docker.com/r/gxmandppx/nodeflare)) for amd64 / arm64. The examples below use a Linux host and mount `/etc/nodeflare` at the same path inside the container to persist configuration and local data.
 
 ## First Deployment
 
 ### Prepare the Config
 
-The container reads `/etc/nodeflare/config.toml`, so create that file first — it won't start without it:
+For the first deployment, create `/etc/nodeflare` on the host and download the example configuration as `config.toml`. The container reads this file at startup:
 
 ```bash
-mkdir -p data
-curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o data/config.toml
+sudo install -d -m 700 /etc/nodeflare
+sudo curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o /etc/nodeflare/config.toml
+sudo chmod 600 /etc/nodeflare/config.toml
 ```
 
-Edit `data/config.toml` and at least set the admin account:
+Edit `/etc/nodeflare/config.toml` with administrator privileges and at least set the admin account:
 
 ```toml
 admin_username = "admin"
@@ -24,14 +25,16 @@ admin_password = "your-strong-password"
 
 Leave the rest as-is. Note that `bind_addr = "0.0.0.0:2206"` is the listen address inside the container — **do not change it to `127.0.0.1`**, or the published port won't be reachable.
 
-::: tip
-The image runs as UID `10001`, so the mounted directory must belong to that user — otherwise the container cannot write the config or database:
+::: tip Directory permissions
+After editing, set the directory and configuration file ownership to the container user, `10001:10001`:
 
 ```bash
-sudo chown -R 10001:10001 data
+sudo chown -R 10001:10001 /etc/nodeflare
 ```
 
-On SELinux distributions (Fedora / RHEL and similar), append `:Z` to the mount path if you hit permission errors, e.g. `-v "$PWD/data:/etc/nodeflare:Z"`.
+Bind mounts retain host permissions, so using `/etc/nodeflare` still requires this step. Both the directory and the config file must be writable so the server can save the database, clear the bootstrap password, and update the database connection string.
+
+On SELinux distributions (Fedora / RHEL and similar), append `:Z` to the mount path if you hit permission errors, e.g. `-v /etc/nodeflare:/etc/nodeflare:Z`. The same suffix works for Compose mounts.
 :::
 
 ### Start the Container
@@ -42,11 +45,11 @@ Docker:
 docker run -d --name nodeflare \
   --restart unless-stopped \
   -p 2206:2206 \
-  -v "$PWD/data:/etc/nodeflare" \
+  -v /etc/nodeflare:/etc/nodeflare \
   gxmandppx/nodeflare:latest
 ```
 
-Docker Compose (save the following as `compose.yaml` next to `data/`):
+Docker Compose (create `compose.yaml` in your working directory with the following content):
 
 ```yaml
 services:
@@ -57,8 +60,10 @@ services:
     ports:
       - "2206:2206"
     volumes:
-      - ./data:/etc/nodeflare
+      - /etc/nodeflare:/etc/nodeflare
 ```
+
+Run this from the directory containing `compose.yaml`:
 
 ```bash
 docker compose up -d
@@ -76,6 +81,10 @@ The panel does not serve HTTPS, so credentials would travel in clear text. To ex
 
 ## Updating
 
+Before upgrading, export a ZIP backup from the **Database** page and save it locally — see [Database & Backups](/en/guide/database). Recreate the container with its original mount directory. If an existing deployment uses `./data` or another directory, keep that path; there is no need to migrate it to `/etc/nodeflare`.
+
+Docker Compose (run from the directory containing the original `compose.yaml`):
+
 ```bash
 docker compose pull && docker compose up -d
 ```
@@ -84,28 +93,36 @@ With `docker run`, pull the new image and recreate the container:
 
 ```bash
 docker pull gxmandppx/nodeflare:latest
-docker rm -f nodeflare
-# re-run the docker run command from the first deployment
+docker stop nodeflare
+docker rm nodeflare
+# re-run docker run with the original ports, mount directory, and other options
 ```
 
-Config, database, themes, and backups under `data/` are preserved. As with a script install, export a backup from the **Database** page before upgrading — see [Database & Backups](/en/guide/database).
+The configuration, default SQLite database, and themes in the host mount directory are preserved. Keep using the existing `config.toml` when updating. Exported ZIP backups are downloaded by the browser; they are not automatically saved in this directory.
 
-`latest` is used by default; pin a version when you need to, e.g. `gxmandppx/nodeflare:1.0.0`.
+The examples use `latest`. To pin a version, replace it with a version tag published on Docker Hub, without the `v` prefix. For later upgrades, change that tag before pulling and recreating the container.
 
 ## Logs and Uninstall
 
 ```bash
-docker logs -f nodeflare      # live logs
-docker compose down           # stop and remove the container (Compose)
-docker rm -f nodeflare        # stop and remove the container (docker run)
+docker logs -f nodeflare
 ```
 
-Uninstalling leaves `data/` on the host; delete it manually when you no longer need it:
+If you need a backup, export it from the **Database** page while the container is still running and save it locally — see [Database & Backups](/en/guide/database). Then choose the command matching your deployment to stop and remove the container:
 
 ```bash
-rm -rf data
+docker compose down       # Compose deployment
+docker rm -f nodeflare    # docker run deployment
 ```
 
+Uninstalling leaves `/etc/nodeflare` on the host. If you used another mount directory, use its actual path.
+
 ::: warning
-`data/` contains the SQLite database, themes, and backups. Export a backup from the **Database** page before deleting it — see [Database & Backups](/en/guide/database).
+This directory contains configuration, the default SQLite database, and themes. It may also contain `agent/` if an agent is installed on the same host. Before deleting it, confirm that your backup has been saved and none of the files are still needed.
 :::
+
+Once confirmed, delete the data directory manually:
+
+```bash
+sudo rm -rf /etc/nodeflare
+```

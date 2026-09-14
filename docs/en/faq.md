@@ -24,15 +24,15 @@ Make sure the node isn't marked **hidden** and that **public dashboard** is enab
 
 ## How do I expose the panel to the internet?
 
-The server listens on `127.0.0.1` by default. Put it behind an HTTPS reverse proxy and add the proxy to `trusted_proxies` — see [Reverse Proxy](/en/guide/proxy).
+Script installations listen on `127.0.0.1` by default; Docker containers need `0.0.0.0:2206` inside the container. For external access, use an HTTPS reverse proxy and add the proxy to `trusted_proxies` — see [Reverse Proxy](/en/guide/proxy).
 
 ## Logs, upgrades, and uninstall for Docker deployments?
 
-Logs: `docker logs -f nodeflare`; upgrade: `docker compose pull && docker compose up -d` (or `docker pull` plus recreating the container); uninstall: `docker compose down` / `docker rm -f nodeflare`. All data stays in the mounted `./data` — see [Docker Deployment](/en/guide/docker).
+Logs: `docker logs -f nodeflare`; upgrade: `docker compose pull && docker compose up -d` (or `docker pull` plus recreating the container); uninstall: `docker compose down` / `docker rm -f nodeflare`. Configuration and local data stay in the host mount directory (`/etc/nodeflare` in these examples). Keep the original directory when updating — see [Docker Deployment](/en/guide/docker).
 
 ## The Docker container exits immediately after starting
 
-Most likely the mounted directory has no `config.toml`, or it isn't owned by UID `10001` so it can't be written. Prepare the config as described in [Docker Deployment](/en/guide/docker#prepare-the-config) and run `sudo chown -R 10001:10001 data`.
+Check `docker logs nodeflare` first. Common causes are a missing `config.toml` or the container user `10001:10001` being unable to read and write the directory and configuration file. Follow [Docker Deployment](/en/guide/docker#prepare-the-config) to prepare the config and permissions. The examples use `sudo chown -R 10001:10001 /etc/nodeflare`; use the actual path for a custom mount directory.
 
 ## Backup export reports "over the limit"?
 

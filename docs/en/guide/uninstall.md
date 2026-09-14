@@ -3,7 +3,7 @@
 ## Uninstall the Server
 
 ::: tip
-For Docker deployments (`docker compose down` / `docker rm -f` and the `data/` directory) see [Docker Deployment](/en/guide/docker#logs-and-uninstall).
+For Docker deployments, remove the container with `docker compose down` / `docker rm -f nodeflare`. The host mount directory (`/etc/nodeflare` in these examples) is preserved; see [Docker Deployment](/en/guide/docker#logs-and-uninstall) for data cleanup.
 :::
 
 Keep config and data (stops and removes the service only).

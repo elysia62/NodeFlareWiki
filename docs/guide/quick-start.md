@@ -59,18 +59,19 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh 
 
 ## Docker 部署
 
-官方镜像 `gxmandppx/nodeflare` 支持 x64 与 ARM64 服务器，配置和数据保存在挂载的 `./data`：
+官方镜像 `gxmandppx/nodeflare` 支持 amd64 / arm64。以下 Linux 部署示例将配置和本地数据保存在宿主机的 `/etc/nodeflare`：
 
 ```bash
-mkdir -p data
-curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o data/config.toml
-# 编辑 data/config.toml，填好管理员账号密码
-sudo chown -R 10001:10001 data
+sudo install -d -m 700 /etc/nodeflare
+sudo curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o /etc/nodeflare/config.toml
+sudo chmod 600 /etc/nodeflare/config.toml
+# 编辑 /etc/nodeflare/config.toml，填好管理员账号密码
+sudo chown -R 10001:10001 /etc/nodeflare
 
 docker run -d --name nodeflare \
   --restart unless-stopped \
   -p 2206:2206 \
-  -v "$PWD/data:/etc/nodeflare" \
+  -v /etc/nodeflare:/etc/nodeflare \
   gxmandppx/nodeflare:latest
 ```
 

@@ -3,7 +3,7 @@
 ## 卸载服务端
 
 ::: tip
-Docker 部署的清理方式（`docker compose down` / `docker rm -f` 与 `data/` 目录）见 [Docker 部署](/guide/docker#日志与卸载)。
+Docker 部署通过 `docker compose down` / `docker rm -f nodeflare` 删除容器；宿主机挂载目录（本文示例为 `/etc/nodeflare`）会保留，数据清理见 [Docker 部署](/guide/docker#日志与卸载)。
 :::
 
 保留配置与数据（仅停止并移除系统服务）。

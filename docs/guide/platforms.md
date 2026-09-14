@@ -21,11 +21,11 @@
 | Windows | `%ProgramFiles%\NodeFlare` | `%ProgramData%\NodeFlare\Server` |
 | macOS | `/usr/local/libexec/nodeflare` | `/Library/Application Support/NodeFlare/Server` |
 | FreeBSD | `/usr/local/libexec/nodeflare` | `/var/db/nodeflare/server` |
-| Docker | 镜像内已包含 | 容器内 `/etc/nodeflare`，通常挂载到宿主机（如 `./data`） |
+| Docker | 镜像内已包含 | 容器内 `/etc/nodeflare`，本文示例挂载宿主机的同名目录 |
 
 Agent（Linux）：程序位于 `/opt/nodeflare/agent`，配置与状态位于 `/etc/nodeflare/agent`。SQLite 文件位于配置目录下。
 
-Docker 部署的配置文件就是挂载目录下的 `config.toml`，见 [Docker 部署](/guide/docker#准备配置)。
+按本文 Docker 示例部署时，宿主机与容器内的配置文件路径均为 `/etc/nodeflare/config.toml`，目录及配置文件需允许容器用户 `10001:10001` 读写，见 [Docker 部署](/guide/docker#准备配置)。
 
 ## 日志位置
 

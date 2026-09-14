@@ -35,14 +35,17 @@ MONITOR_ADMIN_USERNAME=admin MONITOR_ADMIN_PASSWORD='your password' bun run test
 ## Building the Image
 
 ```bash
-docker build -t nodeflare:local .
+nodeflare_version="$(sh scripts/resolve-version.sh)"
+docker build --build-arg NODEFLARE_VERSION="$nodeflare_version" -t nodeflare:local .
 ```
 
-The `Dockerfile` at the repository root builds the frontend assets first, then packs the statically linked Rust binary into an Alpine runtime (running as non-root UID `10001`). The version is resolved by `scripts/resolve-version.sh` and can be overridden with `--build-arg NODEFLARE_VERSION=1.2.3`. After building, verify startup and frontend assets with:
+The root `Dockerfile` builds the frontend assets and a Rust backend statically linked with musl. The runtime uses the latest stable `alpine:latest` image and runs as non-root user `10001:10001`. The commands above resolve the version with `scripts/resolve-version.sh` and pass it to both frontend and backend as a build argument. After building, use the same version to verify startup and frontend assets:
 
 ```bash
-NODEFLARE_VERSION=1.0.0 sh scripts/smoke-test-docker.sh nodeflare:local
+NODEFLARE_VERSION="$nodeflare_version" sh scripts/smoke-test-docker.sh nodeflare:local
 ```
+
+GitHub Actions publishes images only when a version tag in the form `vX.Y.Z` is pushed. After the amd64 / arm64 builds and checks pass, it publishes to `gxmandppx/nodeflare`. Image version tags omit the `v` prefix, and `latest` is updated at the same time.
 
 For image usage see [Docker Deployment](/en/guide/docker).
 

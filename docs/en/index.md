@@ -18,6 +18,7 @@ hero:
     - theme: alt
       text: Live Demo
       link: /demo/
+      target: _self
     - theme: alt
       text: FAQ
       link: /en/faq

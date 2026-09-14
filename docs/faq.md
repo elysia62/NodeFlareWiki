@@ -24,15 +24,15 @@
 
 ## 如何对外访问面板？
 
-服务端默认只监听 `127.0.0.1`，需经 HTTPS 反向代理，并把代理地址加入 `trusted_proxies`，见[反向代理](/guide/proxy)。
+脚本安装默认监听 `127.0.0.1`；Docker 容器内需监听 `0.0.0.0:2206`。对外访问时使用 HTTPS 反向代理，并把代理地址加入 `trusted_proxies`，见[反向代理](/guide/proxy)。
 
 ## Docker 部署的日志、升级与卸载？
 
-日志用 `docker logs -f nodeflare`；升级用 `docker compose pull && docker compose up -d`（或 `docker pull` 后重建容器）；卸载用 `docker compose down` / `docker rm -f nodeflare`。数据都在挂载的 `./data`，见 [Docker 部署](/guide/docker)。
+日志用 `docker logs -f nodeflare`；升级用 `docker compose pull && docker compose up -d`（或 `docker pull` 后重建容器）；卸载用 `docker compose down` / `docker rm -f nodeflare`。配置和本地数据保存在宿主机挂载目录（本例为 `/etc/nodeflare`），更新时沿用原目录，见 [Docker 部署](/guide/docker)。
 
 ## Docker 容器启动后立刻退出？
 
-多半是挂载目录里没有 `config.toml`，或目录属主不是 UID `10001` 导致无法写入。按 [Docker 部署](/guide/docker#准备配置) 先准备配置，并执行 `sudo chown -R 10001:10001 data`。
+先用 `docker logs nodeflare` 查看错误。常见原因是挂载目录里没有 `config.toml`，或容器用户 `10001:10001` 无法读写目录及配置文件。按 [Docker 部署](/guide/docker#准备配置) 准备配置并设置权限；本例使用 `sudo chown -R 10001:10001 /etc/nodeflare`，自定义挂载目录请使用实际路径。
 
 ## 导出备份报超限？
 

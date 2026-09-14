@@ -59,18 +59,19 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh 
 
 ## Docker Deployment
 
-The official `gxmandppx/nodeflare` image runs on x64 and ARM64 servers and keeps config and data in a mounted `./data`:
+The official `gxmandppx/nodeflare` image supports amd64 / arm64. This Linux deployment example stores configuration and local data in `/etc/nodeflare` on the host:
 
 ```bash
-mkdir -p data
-curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o data/config.toml
-# edit data/config.toml: set the admin account
-sudo chown -R 10001:10001 data
+sudo install -d -m 700 /etc/nodeflare
+sudo curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o /etc/nodeflare/config.toml
+sudo chmod 600 /etc/nodeflare/config.toml
+# Edit /etc/nodeflare/config.toml and set the administrator username and password
+sudo chown -R 10001:10001 /etc/nodeflare
 
 docker run -d --name nodeflare \
   --restart unless-stopped \
   -p 2206:2206 \
-  -v "$PWD/data:/etc/nodeflare" \
+  -v /etc/nodeflare:/etc/nodeflare \
   gxmandppx/nodeflare:latest
 ```
 

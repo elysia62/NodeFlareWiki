@@ -35,14 +35,17 @@ MONITOR_ADMIN_USERNAME=admin MONITOR_ADMIN_PASSWORD='你的密码' bun run test:
 ## 构建镜像
 
 ```bash
-docker build -t nodeflare:local .
+nodeflare_version="$(sh scripts/resolve-version.sh)"
+docker build --build-arg NODEFLARE_VERSION="$nodeflare_version" -t nodeflare:local .
 ```
 
-仓库根目录的 `Dockerfile` 会先构建前端资源，再把静态链接的 Rust 二进制装入 Alpine 运行时（以非 root 用户 UID `10001` 运行）。版本号由 `scripts/resolve-version.sh` 解析，可用 `--build-arg NODEFLARE_VERSION=1.2.3` 覆盖。镜像构建后可验证启动与前端资源：
+仓库根目录的 `Dockerfile` 构建前端资源和使用 musl 静态链接的 Rust 后端，运行时使用最新稳定版 `alpine:latest`，以非 root 用户 `10001:10001` 运行。上述命令通过 `scripts/resolve-version.sh` 解析版本号，再作为构建参数传给前后端。构建后使用同一版本号验证启动与前端资源：
 
 ```bash
-NODEFLARE_VERSION=1.0.0 sh scripts/smoke-test-docker.sh nodeflare:local
+NODEFLARE_VERSION="$nodeflare_version" sh scripts/smoke-test-docker.sh nodeflare:local
 ```
+
+GitHub Actions 仅在推送 `vX.Y.Z` 格式的版本标签时发布镜像；amd64 / arm64 构建及验证成功后，推送到 `gxmandppx/nodeflare`。镜像版本标签不带 `v`，并同时更新 `latest`。
 
 镜像的使用方式见 [Docker 部署](/guide/docker)。
 

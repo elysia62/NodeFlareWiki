@@ -21,11 +21,11 @@ The install script auto-detects the service manager (systemd / OpenRC / launchd 
 | Windows | `%ProgramFiles%\NodeFlare` | `%ProgramData%\NodeFlare\Server` |
 | macOS | `/usr/local/libexec/nodeflare` | `/Library/Application Support/NodeFlare/Server` |
 | FreeBSD | `/usr/local/libexec/nodeflare` | `/var/db/nodeflare/server` |
-| Docker | Bundled in the image | `/etc/nodeflare` in the container, normally mounted to the host (e.g. `./data`) |
+| Docker | Bundled in the image | `/etc/nodeflare` in the container, mounted from the same host path in these examples |
 
 Agent (Linux): program at `/opt/nodeflare/agent`, config and state at `/etc/nodeflare/agent`. The SQLite file lives in the config directory.
 
-In Docker, the config file is simply `config.toml` in the mounted directory — see [Docker Deployment](/en/guide/docker#prepare-the-config).
+In these Docker examples, the config file is `/etc/nodeflare/config.toml` on both the host and the container. The directory and config file must be readable and writable by container user `10001:10001` — see [Docker Deployment](/en/guide/docker#prepare-the-config).
 
 ## Log Locations
 

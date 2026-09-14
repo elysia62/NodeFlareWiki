@@ -1,10 +1,14 @@
+<script setup>
+import { withBase } from 'vitepress'
+</script>
+
 # 界面预览
 
 NodeFlare 由公开看板与管理后台两部分组成，均支持简体中文 / English 双语，站点名称、公告、Logo、背景图与显示项均可在后台配置。
 
 ## 公开看板
 
-面向访客的节点状态看板，卡片每秒刷新。点击下图可直接打开[在线演示](/demo/)，无需部署即可体验节点详情、历史图表与主题切换。
+面向访客的节点状态看板，卡片每秒刷新。点击下图可直接打开<a :href="withBase('/demo/')" target="_self">在线演示</a>，无需部署即可体验节点详情、历史图表与主题切换。
 
 <DemoPreview
   src="/images/frontend.png"
