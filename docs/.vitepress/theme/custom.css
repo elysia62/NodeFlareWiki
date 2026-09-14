@@ -6,3 +6,40 @@
 .VPSidebar::-webkit-scrollbar {
   display: none; /* Chrome / Safari / Edge */
 }
+
+/* 界面预览：点击截图跳转在线演示 */
+.demo-preview {
+  position: relative;
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  line-height: 0;
+  transition: box-shadow 0.25s;
+}
+
+.demo-preview img {
+  margin: 0;
+  border-radius: 8px;
+}
+
+.demo-preview:hover {
+  box-shadow: 0 0 0 2px var(--vp-c-brand-1);
+}
+
+.demo-preview-badge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.62);
+  transition: background-color 0.25s;
+}
+
+.demo-preview:hover .demo-preview-badge {
+  background: var(--vp-c-brand-1);
+}

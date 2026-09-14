@@ -4,9 +4,18 @@ NodeFlare consists of a public dashboard and an admin panel, both available in S
 
 ## Public Dashboard
 
-The visitor-facing status dashboard; cards refresh every second.
+The visitor-facing status dashboard; cards refresh every second. Click the image below to open the [Live Demo](/demo/) — no deployment needed.
 
-![Public dashboard](/images/frontend.png)
+<DemoPreview
+  src="/images/frontend.png"
+  alt="Public dashboard"
+  href="/demo/"
+  badge="Live Demo"
+/>
+
+::: tip
+The live demo runs on simulated data — use it to try out themes and display options before configuring your own panel.
+:::
 
 ## Admin Panel
 
