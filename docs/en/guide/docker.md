@@ -4,9 +4,9 @@ NodeFlare ships an official image, `gxmandppx/nodeflare` ([Docker Hub](https://h
 
 ## First Deployment
 
-### 1. Prepare the Config
+### Prepare the Config
 
-The container reads `/etc/nodeflare/config.toml` on startup, so create that file first — without it the container won't start:
+The container reads `/etc/nodeflare/config.toml`, so create that file first — it won't start without it:
 
 ```bash
 mkdir -p data
@@ -25,16 +25,16 @@ admin_password = "your-strong-password"
 Leave the rest as-is. Note that `bind_addr = "0.0.0.0:2206"` is the listen address inside the container — **do not change it to `127.0.0.1`**, or the published port won't be reachable.
 
 ::: tip
-The image runs as UID `10001`. If the mounted directory belongs to another user, run this before starting:
+The image runs as UID `10001`, so the mounted directory must belong to that user — otherwise the container cannot write the config or database:
 
 ```bash
 sudo chown -R 10001:10001 data
 ```
 
-Otherwise the container cannot write the database or config file. On SELinux distributions such as Fedora / RHEL, append `:Z` to the mount path (e.g. `-v "$PWD/data:/etc/nodeflare:Z"`) if you hit permission errors.
+On SELinux distributions (Fedora / RHEL and similar), append `:Z` to the mount path if you hit permission errors, e.g. `-v "$PWD/data:/etc/nodeflare:Z"`.
 :::
 
-### 2. Start the Container
+### Start the Container
 
 Docker:
 
@@ -64,7 +64,7 @@ services:
 docker compose up -d
 ```
 
-### 3. Open the Panel
+### Open the Panel
 
 Browse to `http://your-server-ip:2206/admin/login` and sign in with the admin account from the config file.
 
@@ -88,17 +88,16 @@ docker rm -f nodeflare
 # re-run the docker run command from the first deployment
 ```
 
-Config, database, themes, and backups under `data/` are preserved. As with the install script, export a backup from the **Database** page before upgrading — see [Database & Backups](/en/guide/database).
+Config, database, themes, and backups under `data/` are preserved. As with a script install, export a backup from the **Database** page before upgrading — see [Database & Backups](/en/guide/database).
 
-`latest` is used by default; to pin a version, replace it with a concrete one such as `gxmandppx/nodeflare:1.0.0`.
+`latest` is used by default; pin a version when you need to, e.g. `gxmandppx/nodeflare:1.0.0`.
 
 ## Logs and Uninstall
 
 ```bash
-docker logs -f nodeflare                                # live logs
-docker compose down                                     # stop and remove the container
-docker rm -f nodeflare                                  # for docker run
-docker run --rm gxmandppx/nodeflare:latest --version    # image version
+docker logs -f nodeflare      # live logs
+docker compose down           # stop and remove the container (Compose)
+docker rm -f nodeflare        # stop and remove the container (docker run)
 ```
 
 Uninstalling leaves `data/` on the host; delete it manually when you no longer need it:

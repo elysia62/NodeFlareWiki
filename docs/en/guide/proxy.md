@@ -20,7 +20,7 @@ Inside the container the peer IP is the Docker bridge address, not `127.0.0.1`, 
 trusted_proxies = ["127.0.0.1/32", "::1/128", "172.17.0.1/32"]
 ```
 
-`172.17.0.1` is the default Docker bridge gateway — check it with `docker network inspect bridge`. If the reverse proxy is itself a container on the same Compose network, just list that subnet, e.g. `trusted_proxies = ["172.20.0.0/16"]`; never use `0.0.0.0/0`, which trusts forged headers from every client.
+`172.17.0.1` is the default Docker bridge gateway; confirm it with `docker network inspect bridge`. If the reverse proxy is itself a container on the same Compose network, just list that subnet, e.g. `trusted_proxies = ["172.20.0.0/16"]`; never use `0.0.0.0/0`, which trusts forged headers from every client.
 :::
 
 ## nginx

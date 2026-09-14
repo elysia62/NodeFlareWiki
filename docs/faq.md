@@ -24,15 +24,15 @@
 
 ## 如何对外访问面板？
 
-服务端默认只监听 `127.0.0.1`，需经 HTTPS 反向代理，并把代理地址加入 `trusted_proxies`，见[反向代理](/guide/proxy)。Docker 部署时要注意容器看到的来源 IP 是 Docker 网关地址，配置方式见[反向代理](/guide/proxy#可信代理)。
+服务端默认只监听 `127.0.0.1`，需经 HTTPS 反向代理，并把代理地址加入 `trusted_proxies`，见[反向代理](/guide/proxy)。
 
-## Docker 部署怎么看日志 / 怎么升级？
+## Docker 部署的日志、升级与卸载？
 
-日志用 `docker logs -f nodeflare`，升级用 `docker compose pull && docker compose up -d`（或 `docker pull` 后重建容器），数据保留在挂载的 `./data`，见 [Docker 部署](/guide/docker#更新)。
+日志用 `docker logs -f nodeflare`；升级用 `docker compose pull && docker compose up -d`（或 `docker pull` 后重建容器）；卸载用 `docker compose down` / `docker rm -f nodeflare`。数据都在挂载的 `./data`，见 [Docker 部署](/guide/docker)。
 
 ## Docker 容器启动后立刻退出？
 
-多半是挂载目录里没有 `config.toml`，或目录属主不是 UID `10001` 导致无法写入。按 [Docker 部署](/guide/docker#1-准备配置) 先准备配置，并执行 `sudo chown -R 10001:10001 data`。
+多半是挂载目录里没有 `config.toml`，或目录属主不是 UID `10001` 导致无法写入。按 [Docker 部署](/guide/docker#准备配置) 先准备配置，并执行 `sudo chown -R 10001:10001 data`。
 
 ## 导出备份报超限？
 
@@ -44,7 +44,7 @@ Linux 下文件缓存不计入已用内存、共享内存计入，面板显示�
 
 ## 如何卸载？
 
-服务端用安装脚本 `--uninstall`（保留数据）或 `--uninstall --purge`（删除数据）卸载，Agent 加 `--uninstall` 参数卸载，详见[卸载](/guide/uninstall)。Docker 部署用 `docker compose down` 或 `docker rm -f nodeflare`，见 [Docker 部署](/guide/docker#日志与卸载)。
+服务端用安装脚本 `--uninstall`（保留数据）或 `--uninstall --purge`（删除数据）卸载，Agent 加 `--uninstall` 参数卸载，详见[卸载](/guide/uninstall)。Docker 部署见 [Docker 部署](/guide/docker)。
 
 ## 远程执行命令为什么需要 TOTP？
 

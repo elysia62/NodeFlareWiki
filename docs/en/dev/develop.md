@@ -38,7 +38,7 @@ MONITOR_ADMIN_USERNAME=admin MONITOR_ADMIN_PASSWORD='your password' bun run test
 docker build -t nodeflare:local .
 ```
 
-The `Dockerfile` at the repository root builds the frontend assets first, then packs the statically linked Rust binary into an Alpine runtime (running as non-root UID `10001`). The version is resolved by `scripts/resolve-version.sh` from the Git tag or `package.json` and can be overridden with `--build-arg NODEFLARE_VERSION=1.2.3`; after building, `scripts/smoke-test-docker.sh` verifies startup and frontend assets:
+The `Dockerfile` at the repository root builds the frontend assets first, then packs the statically linked Rust binary into an Alpine runtime (running as non-root UID `10001`). The version is resolved by `scripts/resolve-version.sh` and can be overridden with `--build-arg NODEFLARE_VERSION=1.2.3`. After building, verify startup and frontend assets with:
 
 ```bash
 NODEFLARE_VERSION=1.0.0 sh scripts/smoke-test-docker.sh nodeflare:local

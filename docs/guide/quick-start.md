@@ -2,10 +2,6 @@
 
 安装脚本自动下载最新 Release 并注册系统服务（systemd / OpenRC / launchd / FreeBSD rc / Windows 计划任务）。
 
-::: tip
-不想让安装脚本改动系统服务，或习惯用容器编排，可直接使用官方镜像，见 [Docker 部署](/guide/docker)。
-:::
-
 ## 一键安装
 
 Linux / macOS：
@@ -63,25 +59,23 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh 
 
 ## Docker 部署
 
-官方镜像 `gxmandppx/nodeflare` 支持 x64 与 ARM64 服务器，配置和数据保存在挂载目录（下文以 `./data` 为例）：
+官方镜像 `gxmandppx/nodeflare` 支持 x64 与 ARM64 服务器，配置和数据保存在挂载的 `./data`：
 
 ```bash
 mkdir -p data
 curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o data/config.toml
-# 编辑 data/config.toml，填好管理员账号密码（其余保持默认）
-sudo chown -R 10001:10001 data   # 容器以 UID 10001 运行，需要目录写权限
+# 编辑 data/config.toml，填好管理员账号密码
+sudo chown -R 10001:10001 data
 
 docker run -d --name nodeflare \
   --restart unless-stopped \
-  -p 127.0.0.1:2206:2206 \
+  -p 2206:2206 \
   -v "$PWD/data:/etc/nodeflare" \
   gxmandppx/nodeflare:latest
 ```
 
-随后访问 `http://127.0.0.1:2206/admin/login`，后续的节点与 Agent 配置与脚本安装完全一致。Compose 示例、更新与卸载见 [Docker 部署](/guide/docker)。
+随后访问 `http://服务器IP:2206/admin/login`，节点与 Agent 的配置与脚本安装一致。对外使用需经 HTTPS 反向代理，见[反向代理](/guide/proxy)；Compose 示例、更新与卸载见 [Docker 部署](/guide/docker)。
 
 ## 更新
 
 重新运行安装脚本即可，配置与数据保留。安装与更新都会校验 Release 摘要，失败时自动回滚到上一版本。
-
-Docker 部署的更新方式见 [Docker 部署](/guide/docker#更新)。

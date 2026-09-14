@@ -10,7 +10,7 @@ NodeFlare 主仓库的目录结构如下：
 | `frontend/` | 前端（React + Vite）：`src/components` 组件、`src/styles` 样式 |
 | `scripts/` | 构建、版本解析与冒烟测试脚本（含 `smoke-test-docker.sh`） |
 | `docs/` | 英文 README 与 systemd 服务单元 |
-| `docker/` | Docker 部署用的 `config.example.toml`（容器内路径与监听地址不同） |
-| `Dockerfile` | 多阶段镜像构建：前端 → 静态链接的 Rust 二进制 → Alpine 运行时 |
+| `docker/` | Docker 部署的配置示例（容器内路径与监听地址） |
+| `Dockerfile` | 镜像构建：前端资源 + 静态链接的 Rust 二进制 → Alpine 运行时 |
 
 本 Wiki 的源码位于 [NodeFlareWiki](https://github.com/elysia62/NodeFlareWiki) 仓库，基于 VitePress 构建，欢迎通过 Pull Request 补充文档。

@@ -17,7 +17,7 @@
 | `theme_dir` | 主题解压目录，默认配置目录下的 `themes`，详见[主题开发](/guide/themes) |
 
 ::: tip
-Docker 部署时配置文件就是挂载目录下的 `config.toml`，示例见仓库 [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)；其中 `bind_addr` 需保持 `0.0.0.0:2206`，具体填法见 [Docker 部署](/guide/docker#1-准备配置)。
+Docker 部署时配置文件就是挂载目录下的 `config.toml`；其中 `bind_addr` 需保持 `0.0.0.0:2206`，具体填法见 [Docker 部署](/guide/docker#准备配置)。
 :::
 
 ## 命令行参数

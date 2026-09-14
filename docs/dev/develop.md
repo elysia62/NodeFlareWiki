@@ -38,7 +38,7 @@ MONITOR_ADMIN_USERNAME=admin MONITOR_ADMIN_PASSWORD='你的密码' bun run test:
 docker build -t nodeflare:local .
 ```
 
-仓库根目录的 `Dockerfile` 会先构建前端资源，再把静态链接的 Rust 二进制装入 Alpine 运行时（以非 root 用户 UID `10001` 运行）。版本号由 `scripts/resolve-version.sh` 从 Git 标签或 `package.json` 解析，可用 `--build-arg NODEFLARE_VERSION=1.2.3` 覆盖；镜像构建后用 `scripts/smoke-test-docker.sh` 验证启动与前端资源：
+仓库根目录的 `Dockerfile` 会先构建前端资源，再把静态链接的 Rust 二进制装入 Alpine 运行时（以非 root 用户 UID `10001` 运行）。版本号由 `scripts/resolve-version.sh` 解析，可用 `--build-arg NODEFLARE_VERSION=1.2.3` 覆盖。镜像构建后可验证启动与前端资源：
 
 ```bash
 NODEFLARE_VERSION=1.0.0 sh scripts/smoke-test-docker.sh nodeflare:local

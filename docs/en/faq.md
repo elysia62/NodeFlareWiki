@@ -24,15 +24,15 @@ Make sure the node isn't marked **hidden** and that **public dashboard** is enab
 
 ## How do I expose the panel to the internet?
 
-The server listens on `127.0.0.1` by default. Put it behind an HTTPS reverse proxy and add the proxy to `trusted_proxies` — see [Reverse Proxy](/en/guide/proxy). In Docker the container sees the Docker gateway as the peer IP; see [Trusted Proxies](/en/guide/proxy#trusted-proxies).
+The server listens on `127.0.0.1` by default. Put it behind an HTTPS reverse proxy and add the proxy to `trusted_proxies` — see [Reverse Proxy](/en/guide/proxy).
 
-## How do I read logs or upgrade a Docker deployment?
+## Logs, upgrades, and uninstall for Docker deployments?
 
-Use `docker logs -f nodeflare` for logs and `docker compose pull && docker compose up -d` (or `docker pull` plus recreating the container) to upgrade. Data stays in the mounted `./data` — see [Docker Deployment](/en/guide/docker#updating).
+Logs: `docker logs -f nodeflare`; upgrade: `docker compose pull && docker compose up -d` (or `docker pull` plus recreating the container); uninstall: `docker compose down` / `docker rm -f nodeflare`. All data stays in the mounted `./data` — see [Docker Deployment](/en/guide/docker).
 
 ## The Docker container exits immediately after starting
 
-Most likely the mounted directory has no `config.toml`, or it isn't owned by UID `10001` so it can't be written. Prepare the config as described in [Docker Deployment](/en/guide/docker#1-prepare-the-config) and run `sudo chown -R 10001:10001 data`.
+Most likely the mounted directory has no `config.toml`, or it isn't owned by UID `10001` so it can't be written. Prepare the config as described in [Docker Deployment](/en/guide/docker#prepare-the-config) and run `sudo chown -R 10001:10001 data`.
 
 ## Backup export reports "over the limit"?
 
@@ -44,7 +44,7 @@ On Linux, file caches don't count as used memory while shared memory does; the p
 
 ## How do I uninstall?
 
-Run the install script with `--uninstall` (keep data) or `--uninstall --purge` (delete data); the agent accepts `--uninstall`. Details in [Uninstall](/en/guide/uninstall). For Docker, use `docker compose down` or `docker rm -f nodeflare` — see [Docker Deployment](/en/guide/docker#logs-and-uninstall).
+Run the install script with `--uninstall` (keep data) or `--uninstall --purge` (delete data); the agent accepts `--uninstall`. Details in [Uninstall](/en/guide/uninstall). For Docker, see [Docker Deployment](/en/guide/docker).
 
 ## Why does remote execution require TOTP?
 

@@ -14,16 +14,14 @@ trusted_proxies = ["127.0.0.1/32", "::1/128"]
 只有来自这些网段的 `X-Forwarded-For` 才会被信任。
 
 ::: tip Docker 部署
-容器内看到的访客来源 IP 是 Docker 网桥地址，而非 `127.0.0.1`，需要把它一并加入。例如反向代理在宿主机上、面板端口通过 `-p 127.0.0.1:2206:2206` 发布时：
+容器看到的访客来源 IP 是 Docker 网桥地址，而非 `127.0.0.1`，需一并加入。例如反向代理在宿主机上、面板端口通过 `-p 127.0.0.1:2206:2206` 发布时：
 
 ```toml
 trusted_proxies = ["127.0.0.1/32", "::1/128", "172.17.0.1/32"]
 ```
 
-`172.17.0.1` 是 Docker 默认网桥网关，可运行 `docker network inspect bridge` 查看。若反向代理本身也是容器、与面板在同一 Compose 网络，直接写该网络的子网即可，如 `trusted_proxies = ["172.20.0.0/16"]`；不要写 `0.0.0.0/0`，那等于信任所有客户端的伪造头。
+`172.17.0.1` 是 Docker 默认网桥网关，可用 `docker network inspect bridge` 确认。若反向代理本身也是容器、与面板处于同一 Compose 网络，直接写该网络子网即可，如 `trusted_proxies = ["172.20.0.0/16"]`；不要写 `0.0.0.0/0`，那等于信任所有客户端伪造的头。
 :::
-
-其他部署方式见 [Docker 部署](/guide/docker)。
 
 ## nginx
 
@@ -60,7 +58,7 @@ nodeflare.example.com {
 }
 ```
 
-Docker Compose 中也可让 Caddy 直接反向代理容器：
+Docker Compose 中也可让 Caddy 直接代理容器：
 
 ```
 nodeflare.example.com {

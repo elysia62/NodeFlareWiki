@@ -1,12 +1,12 @@
 # Docker 部署
 
-NodeFlare 提供官方镜像 `gxmandppx/nodeflare`（[Docker Hub](https://hub.docker.com/r/gxmandppx/nodeflare)），x64 与 ARM64 服务器均可直接使用。配置与数据统一保存在容器内的 `/etc/nodeflare`，挂载到宿主机目录（下文以 `./data` 为例）即可持久化。
+NodeFlare 提供官方镜像 `gxmandppx/nodeflare`（[Docker Hub](https://hub.docker.com/r/gxmandppx/nodeflare)），x64 与 ARM64 服务器均可直接使用。配置与数据保存在容器内的 `/etc/nodeflare`，挂载到宿主机目录（下文以 `./data` 为例）即可持久化。
 
 ## 首次部署
 
-### 1. 准备配置
+### 准备配置
 
-容器启动时会读取 `/etc/nodeflare/config.toml`，所以要先准备这个文件，否则容器无法启动：
+容器启动时读取 `/etc/nodeflare/config.toml`，需先创建该文件，否则容器会启动失败：
 
 ```bash
 mkdir -p data
@@ -21,19 +21,19 @@ admin_username = "admin"
 admin_password = "换成你的强密码"
 ```
 
-其余保持默认即可，其中 `bind_addr = "0.0.0.0:2206"` 是容器内的监听地址，**不要改成 `127.0.0.1`**，否则端口映射后无法访问。
+其余保持默认，其中 `bind_addr = "0.0.0.0:2206"` 是容器内的监听地址，**不要改成 `127.0.0.1`**，否则端口映射后无法访问。
 
 ::: tip
-镜像内以 UID `10001` 运行。如果挂载目录不属于该用户，启动前先执行：
+镜像以 UID `10001` 运行，挂载目录需归该用户所有，否则容器无法写入配置与数据库：
 
 ```bash
 sudo chown -R 10001:10001 data
 ```
 
-否则容器无法写入数据库与配置。Fedora / RHEL 等 SELinux 系统若报权限错误，在挂载路径后加 `:Z`，如 `-v "$PWD/data:/etc/nodeflare:Z"`。
+SELinux 系统（Fedora / RHEL 等）若报权限错误，在挂载路径后加 `:Z`，如 `-v "$PWD/data:/etc/nodeflare:Z"`。
 :::
 
-### 2. 启动容器
+### 启动容器
 
 Docker：
 
@@ -63,7 +63,7 @@ services:
 docker compose up -d
 ```
 
-### 3. 访问面板
+### 访问面板
 
 浏览器打开 `http://服务器IP:2206/admin/login`，用配置文件中的管理员账号登录。
 
@@ -87,17 +87,16 @@ docker rm -f nodeflare
 # 重新执行首次部署中的 docker run 命令
 ```
 
-`data/` 中的配置、数据库、主题与备份都不会丢失；与脚本安装一样，升级前建议先在后台「数据库」页面导出一次备份，见[数据库与备份](/guide/database)。
+`data/` 中的配置、数据库、主题与备份都不会丢失；升级前建议先在后台「数据库」页面导出一次备份，见[数据库与备份](/guide/database)。
 
-默认使用 `latest` 标签，想固定版本时换成具体版本号即可，例如 `gxmandppx/nodeflare:1.0.0`。
+默认使用 `latest` 标签，需固定版本时换成具体版本号即可，如 `gxmandppx/nodeflare:1.0.0`。
 
 ## 日志与卸载
 
 ```bash
-docker logs -f nodeflare                      # 查看运行日志
-docker compose down                           # 停止并删除容器
-docker rm -f nodeflare                        # docker run 方式停止并删除
-docker run --rm gxmandppx/nodeflare:latest --version   # 查看镜像版本
+docker logs -f nodeflare      # 查看运行日志
+docker compose down           # 停止并删除容器（Compose）
+docker rm -f nodeflare        # 停止并删除容器（docker run）
 ```
 
 卸载后 `data/` 目录仍保留在宿主机，确认不再需要时手动删除：
