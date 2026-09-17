@@ -256,8 +256,8 @@ export function NodeDetails({ server, liveLatencyResults, threshold, retentionDa
     if (point) setPoints((current) => appendRealtimePoint(current, point));
   }, [demo, loadHours, liveTimestamp]);
 
-  // 演示模式下共享波形持续流动：定时把当前采样追加进实时曲线，
-  // 效果与真实部署的实时上报一致（指标每 3 秒循环变化）。
+  // 演示模式下共享波形持续流动：每秒把当前采样追加进实时曲线，
+  // 效果与真实部署的实时上报一致。
   useEffect(() => {
     if (!demo || loadHours !== 0) return;
     const timer = window.setInterval(() => {

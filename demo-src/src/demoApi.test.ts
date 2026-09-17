@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { createDemoRequest } from "./demoApi";
-import { demoHistory, demoServersAt } from "./demo";
+import { demoDraftServer, demoHistory, demoServersAt } from "./demo";
 import { derivePassword } from "./password";
 
 // A storage stub matching the Pick<Storage> surface the demo request accepts.
@@ -114,5 +114,20 @@ describe("demo live waveform", () => {
     // the values must match exactly.
     expect(latest.cpu).toBe(current?.cpu ?? -1);
     expect(latest.net_in).toBe(current?.net_in ?? -1);
+  });
+
+  test("samples the add-server dialog draft on the shared waveform", () => {
+    const at = 1_800_000_000;
+    const draft = demoDraftServer(at);
+    // The draft is only shown by the dialog: it stays out of the monitored list
+    // and carries the admin-only fields the form reads.
+    expect(demoServersAt(at).some((server) => server.id === draft.id)).toBe(false);
+    expect(draft.name).toBeTruthy();
+    expect(draft.network_interface).toBe("eth0");
+    expect(draft.ip_v6.startsWith("2001:db8::")).toBe(true);
+    // Successive samples move the traffic counters the dialog displays.
+    const later = demoDraftServer(at + 60);
+    expect(later.net_rx_total ?? 0).toBeGreaterThan(draft.net_rx_total ?? 0);
+    expect(later.tx_correction).toBe(0);
   });
 });

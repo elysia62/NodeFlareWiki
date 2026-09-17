@@ -1,4 +1,4 @@
-import type { Config, ExchangeRates, HistoryPoint, LatencySample, LatencyTestPoint, Server } from "./types";
+import type { AdminServer, Config, ExchangeRates, HistoryPoint, LatencySample, LatencyTestPoint, Server } from "./types";
 
 export const demoConfig: Config = {
   site_name: "NodeFlare",
@@ -144,8 +144,10 @@ export const demoServers: Server[] = [
   node({ id: "toronto-standby", name: "多伦多 Standby", region: "CA", group_name: "备用节点", tags: "Standby", price: 16, currency: "CAD", expires_at: now + 18 * 86400, timestamp: now - 640, cpu: 0, net_in: 0, net_out: 0 }),
 ];
 
-export const DEMO_REFRESH_INTERVAL_MS = 3_000;
-export const DEMO_CYCLE_SECONDS = 120;
+export const DEMO_REFRESH_INTERVAL_MS = 1_000;
+// A prime cycle keeps whole-minute history steps off the same waveform phase,
+// so sampled history does not flatten into a repeating pattern.
+export const DEMO_CYCLE_SECONDS = 97;
 
 function sampleServer(server: Server, at: number): Server {
   const elapsed = Math.max(0, at - now);
@@ -185,6 +187,47 @@ function sampleServer(server: Server, at: number): Server {
 
 export function demoServersAt(at = Math.floor(Date.now() / 1000)): Server[] {
   return demoServers.map((server) => sampleServer(server, at));
+}
+
+// 演示后台展示的节点字段：公网 IP、网卡、上报间隔等在真实部署里由 Agent 上报，
+// 演示环境用固定值补齐，保证后台表单有完整的可读字段。
+export function demoAdminServer(server: Server, index: number): AdminServer {
+  return {
+    ...server,
+    hidden: false,
+    last_ip: `192.0.2.${index + 10}`,
+    ip_v4: `192.0.2.${index + 10}`,
+    ip_v6: `2001:db8::${index + 10}`,
+    network_interface: "eth0",
+    report_interval: 60,
+    collect_interval: 3,
+    rx_correction: 0,
+    tx_correction: 0,
+    agent_mirror: "",
+    offline_notify_disabled: false,
+    auto_update: true,
+  };
+}
+
+// “添加节点”弹窗在演示模式下的样例：不在监控列表中，只用于展示配置表单和实时数值。
+const draftServer: Server = {
+  ...baseServer,
+  id: "seoul-edge-02",
+  name: "首尔 Edge 02",
+  region: "KR",
+  group_name: "边缘网络",
+  tags: "备用,线路:BGP",
+  price: 96,
+  expires_at: now + 30 * 86400,
+  traffic_limit: 2 * 1024 ** 4,
+  net_rx_total: 320 * 1024 ** 3,
+  net_tx_total: 96 * 1024 ** 3,
+  cpu: 28,
+  latency: demoLatestLatency("seoul-edge-02"),
+};
+
+export function demoDraftServer(at = Math.floor(Date.now() / 1000)): AdminServer {
+  return demoAdminServer(sampleServer(draftServer, at), 14);
 }
 
 export function demoHistory(serverId: string, hours: number, at = Math.floor(Date.now() / 1000)): HistoryPoint[] {

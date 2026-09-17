@@ -27,6 +27,7 @@ import { formatBytes, formatByteSize, parseByteSize } from "../format";
 import { derivePassword } from "../password";
 import { hasActiveRemoteTasks, isRemoteTaskActive, REMOTE_TASK_POLL_INTERVAL_MS, REMOTE_TASK_POLL_TIMEOUT_MS } from "../refresh";
 import { demoMode, dashboardHref } from "../demoMode";
+import { DEMO_REFRESH_INTERVAL_MS, demoDraftServer, demoServersAt } from "../demo";
 import { ASSET_CURRENCIES, type AdminServer, type Config, type DatabaseMigrationResult, type DatabaseStats, type ExchangeRates, type LoginSession, type RemoteTask, type ServerInput, type Settings, type Theme, type ThemeSettingsSchema, type ThemeSettingValue, type TotpSetup, type TotpStatus } from "../types";
 import { Checkbox } from "./Checkbox";
 import { LoginForm } from "./LoginForm";
@@ -182,6 +183,26 @@ export function AdminPanel({
 
   useEffect(() => { void load(); }, [load]);
 
+  // 演示模式下配置弹窗内的实时流量跟随前端波形，每秒重新采样一次。
+  useEffect(() => {
+    if (!demoMode || !editing) return;
+    const sampleAt = () => editing === "new"
+      ? demoDraftServer()
+      : demoServersAt().find((server) => server.id === editing.id) ?? null;
+    const timer = window.setInterval(() => {
+      if (document.hidden || navigator.onLine === false) return;
+      const live = sampleAt();
+      if (!live) return;
+      const rx = live.net_rx_total ?? 0;
+      const tx = live.net_tx_total ?? 0;
+      setRxCurrentBytes(rx);
+      setTxCurrentBytes(tx);
+      setRxCurrentText(formatByteSize(rx));
+      setTxCurrentText(formatByteSize(tx));
+    }, DEMO_REFRESH_INTERVAL_MS);
+    return () => window.clearInterval(timer);
+  }, [editing]);
+
   useEffect(() => {
     if (!authChecked) return;
     const syncAdminPath = () => {
@@ -263,12 +284,14 @@ export function AdminPanel({
   }
 
   function openEditor(server?: AdminServer) {
+    // 演示模式下“添加节点”用样例数据填充，让配置页有真实数值可看。
+    const sample = server ?? (demoMode ? demoDraftServer() : null);
     setEditing(server ?? "new");
-    setForm(server ? toInput(server) : { ...emptyServer });
-    setPriceText(server ? String(server.price) : "0");
-    setTrafficLimitText(formatByteSize(server?.traffic_limit ?? 0));
-    const rxCurrent = server?.net_rx_total ?? 0;
-    const txCurrent = server?.net_tx_total ?? 0;
+    setForm(sample ? toInput(sample) : { ...emptyServer });
+    setPriceText(sample ? String(sample.price) : "0");
+    setTrafficLimitText(formatByteSize(sample?.traffic_limit ?? 0));
+    const rxCurrent = sample?.net_rx_total ?? 0;
+    const txCurrent = sample?.net_tx_total ?? 0;
     setRxCurrentText(formatByteSize(rxCurrent));
     setTxCurrentText(formatByteSize(txCurrent));
     setRxCurrentBytes(rxCurrent);
@@ -977,7 +1000,7 @@ export function AdminPanel({
               <header className="admin-content-header"><h1>{pages[tab].title}</h1><p>{pages[tab].description}</p></header>
               {tab === "servers" ? (
                 <div className="admin-section">
-                  <div className="section-head"><div><h3>{ui(locale, "监控节点", "Monitored servers")}</h3><span>{ui(locale, `${servers.length} 个节点 · 可拖动上下排序`, `${servers.length} server(s) · drag to reorder`)}</span></div><div className="section-actions"><button className="primary-btn compact" onClick={() => openEditor()}><Plus size={15} />{ui(locale, "添加", "Add")}</button></div></div>
+                  <div className="section-head"><div><h3>{ui(locale, "监控节点", "Monitored servers")}</h3><span>{ui(locale, `${servers.length} 个节点 · 可拖动上下排序`, `${servers.length} server(s) · drag to reorder`)}</span></div><div className="section-actions"><button className="primary-btn compact demo-view" onClick={() => openEditor()}><Plus size={15} />{ui(locale, "添加", "Add")}</button></div></div>
                   <div className="batch-toolbar"><label className="select-all"><Checkbox checked={allSelected} onChange={() => setSelectedIds(allSelected ? [] : servers.map((server) => server.id))} />{ui(locale, "全选", "Select all")}</label>{selectedIds.length ? <button className="danger-btn compact" onClick={() => void removeSelected()}><Trash2 size={15} />{ui(locale, `删除选中 (${selectedIds.length})`, `Delete selected (${selectedIds.length})`)}</button> : <span>{ui(locale, "批量操作", "Batch actions")}</span>}</div>
                   <div className="server-list">
                     {servers.map((server, index) => (
@@ -985,7 +1008,7 @@ export function AdminPanel({
                         <button type="button" className="drag-handle" draggable onDragStart={(event) => startDrag(event, server.id)} onDragEnd={() => setDraggingId("")} title={ui(locale, `拖动排序：${server.name}`, `Drag to reorder: ${server.name}`)}><GripVertical size={15} /></button>
                         <Checkbox checked={selectedIds.includes(server.id)} onChange={() => toggleSelected(server.id)} ariaLabel={ui(locale, `选择 ${server.name}`, `Select ${server.name}`)} />
                         <div className="server-name"><div className="server-name-main"><Flag region={server.region} size={17} /><strong>{server.name}</strong></div><ServerIpMeta server={server} agentVersion={server.agent_version} onCopy={(value) => void copyServerIp(value)} locale={locale} /></div>
-                        <div className="row-actions"><button className="icon-btn" disabled={index === 0} onClick={() => void move(index, -1)} title={ui(locale, "上移", "Move up")}><ChevronUp size={15} /></button><button className="icon-btn" disabled={index === servers.length - 1} onClick={() => void move(index, 1)} title={ui(locale, "下移", "Move down")}><ChevronDown size={15} /></button><button className="icon-btn" disabled={busy} onClick={() => void showInstallCommand(server)} title={ui(locale, "下载 Agent", "Download Agent")}><Download size={15} /></button><button className="icon-btn" onClick={() => openEditor(server)} title={ui(locale, "编辑节点", "Edit server")}><Pencil size={15} /></button><button className="icon-btn danger" onClick={() => void remove(server)} title={ui(locale, "删除节点", "Delete server")}><Trash2 size={15} /></button></div>
+                        <div className="row-actions"><button className="icon-btn" disabled={index === 0} onClick={() => void move(index, -1)} title={ui(locale, "上移", "Move up")}><ChevronUp size={15} /></button><button className="icon-btn" disabled={index === servers.length - 1} onClick={() => void move(index, 1)} title={ui(locale, "下移", "Move down")}><ChevronDown size={15} /></button><button className="icon-btn" disabled={busy} onClick={() => void showInstallCommand(server)} title={ui(locale, "下载 Agent", "Download Agent")}><Download size={15} /></button><button className="icon-btn demo-view" onClick={() => openEditor(server)} title={ui(locale, "编辑节点", "Edit server")}><Pencil size={15} /></button><button className="icon-btn danger" onClick={() => void remove(server)} title={ui(locale, "删除节点", "Delete server")}><Trash2 size={15} /></button></div>
                       </div>
                     ))}
                     {!servers.length && !busy ? <div className="list-empty">{ui(locale, "暂无节点", "No servers yet")}</div> : null}

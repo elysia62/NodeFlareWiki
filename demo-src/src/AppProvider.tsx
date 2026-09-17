@@ -110,7 +110,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const carrierLatency = config.show_latency && themeToggle(config, "showCarrierLatency", false);
   useFavicon(configReady ? config.logo_url : undefined);
 
-  // 演示数据由共享波形采样：每 3 秒重新采样一轮，CPU、内存、网速等指标
+  // 演示数据由共享波形采样：每秒重新采样一轮，CPU、内存、网速等指标
   // 随时间循环波动，与详情页图表保持同步；卡片的离线判定复用通用逻辑。
   const demoTickRef = useRef(0);
   useEffect(() => {

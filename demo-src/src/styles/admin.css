@@ -476,6 +476,17 @@
 .demo-readonly .remote-server-picker .checkbox-control input,
 .demo-readonly input[type="file"] { cursor: not-allowed; pointer-events: none; opacity: .55; }
 
+/* 只读演示可打开节点配置弹窗：添加、编辑按钮保持可用 */
+.demo-readonly .section-actions .primary-btn.demo-view,
+.demo-readonly .row-actions button.demo-view { cursor: pointer; pointer-events: auto; opacity: 1; }
+
+/* 弹窗表单只读：字段、开关和保存按钮置灰，取消仍可关闭 */
+.demo-readonly .editor-modal input,
+.demo-readonly .editor-modal select,
+.demo-readonly .editor-modal textarea,
+.demo-readonly .editor-modal .toggle-row,
+.demo-readonly .editor-modal .form-actions .primary-btn { cursor: not-allowed; pointer-events: none; opacity: .55; }
+
 /* 浏览类控件保持可用：导航、主题切换、退出、搜索、展开、只读展示 */
 .demo-readonly .admin-topbar-actions button,
 .demo-readonly .admin-topbar-actions .admin-home-link,

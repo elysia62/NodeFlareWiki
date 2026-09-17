@@ -1,6 +1,6 @@
-import { demoConfig, demoExchangeRates, demoHistory, demoLatencyHistory, demoLatencyTasks, demoServersAt } from "./demo";
+import { demoAdminServer, demoConfig, demoExchangeRates, demoHistory, demoLatencyHistory, demoLatencyTasks, demoServersAt } from "./demo";
 import { derivePassword } from "./password";
-import type { AdminServer, AlertRule, DatabaseStats, LatencyTask, Settings, TelegramSettings, Theme, ThemeSettingsSchema } from "./types";
+import type { AlertRule, DatabaseStats, LatencyTask, Settings, TelegramSettings, Theme, ThemeSettingsSchema } from "./types";
 
 const SESSION_KEY = "nodeflare-demo-session";
 const READ_ONLY = "演示环境不支持修改。";
@@ -97,11 +97,7 @@ export function createDemoRequest(store?: SessionStore) {
     switch (route) {
       case "/api/bootstrap": return Response.json({ config: demoConfig, access: "ok", servers, exchange_rates: demoExchangeRates });
       case "/api/exchange-rates": return Response.json(demoExchangeRates);
-      case "/api/admin/servers": return Response.json({ servers: servers.map((server, index): AdminServer => ({
-        ...server, hidden: false, last_ip: `192.0.2.${index + 10}`, ip_v4: `192.0.2.${index + 10}`,
-        ip_v6: `2001:db8::${index + 10}`, network_interface: "eth0", report_interval: 60, collect_interval: 3,
-        rx_correction: 0, tx_correction: 0, agent_mirror: "", offline_notify_disabled: false, auto_update: true,
-      })) });
+      case "/api/admin/servers": return Response.json({ servers: servers.map(demoAdminServer) });
       case "/api/admin/settings": return Response.json(settings);
       case "/api/admin/themes": return Response.json({ themes });
       case "/api/admin/theme-settings": return Response.json(themeSettings);
