@@ -1,10 +1,10 @@
 # Reverse Proxy
 
-The server listens on `127.0.0.1:2206` by default; use an HTTPS reverse proxy for external access.
+The server listens on `127.0.0.1:2206` by default; external access requires an HTTPS reverse proxy.
 
 ## Trusted Proxies
 
-Add the reverse proxy's address to `trusted_proxies`, otherwise every visitor is counted as the same IP and session cookies won't get the `Secure` flag:
+Add the reverse proxy address to `trusted_proxies`, otherwise every visitor counts as the same IP and session cookies won't carry the `Secure` flag:
 
 ```toml
 # Non-Docker: proxy and panel on the same host
@@ -47,7 +47,7 @@ server {
 ```
 
 ::: tip
-The `Upgrade` / `Connection` lines carry the WebSocket traffic; without them the dashboard won't update in real time.
+The `Upgrade` / `Connection` lines carry WebSocket traffic; without them the dashboard won't update in real time.
 :::
 
 ## Caddy

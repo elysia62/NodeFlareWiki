@@ -3,7 +3,7 @@ import { derivePassword } from "./password";
 import type { AdminServer, AlertRule, DatabaseStats, LatencyTask, Settings, TelegramSettings, Theme, ThemeSettingsSchema } from "./types";
 
 const SESSION_KEY = "nodeflare-demo-session";
-const READ_ONLY = "演示后台仅供查看，不能修改数据或执行操作。";
+const READ_ONLY = "演示环境不支持修改。";
 type SessionStore = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
 const settings: Settings = {
@@ -36,7 +36,7 @@ const rules: AlertRule[] = [{
 }];
 const telegram: TelegramSettings = {
   bot_token: "", chat_id: "", message_thread_id: null,
-  template: "NodeFlare 演示通知\n节点：{{server_name}}\n事件：{{message}}",
+  template: "NodeFlare 通知\n节点：{{server_name}}\n事件：{{message}}",
 };
 const database: DatabaseStats = {
   kind: "sqlite", size_bytes: 48 * 1024 ** 2, reclaimable_bytes: 3 * 1024 ** 2, restart_required: false,
@@ -79,9 +79,9 @@ export function createDemoRequest(store?: SessionStore) {
       // derived value of "admin" instead of the raw credential.
       let credentials: { username?: string; password_derived?: string } | null = null;
       try { credentials = JSON.parse(String(init.body)); }
-      catch { return fail("请输入演示账号和密码：admin / admin", 400); }
+      catch { return fail("请输入账号和密码", 400); }
       if (credentials?.username !== "admin" || !credentials.password_derived || !(await isDemoAdminDerived(credentials.password_derived))) {
-        return fail("账号或密码错误，演示账号和密码均为 admin", 401);
+        return fail("账号或密码错误", 401);
       }
       setSession(true);
       return Response.json({ token: "demo-only" });
@@ -90,7 +90,7 @@ export function createDemoRequest(store?: SessionStore) {
       setSession(false);
       return new Response(null, { status: 204 });
     }
-    if (route.startsWith("/api/admin/") && !authenticated()) return fail("请先登录演示后台", 401);
+    if (route.startsWith("/api/admin/") && !authenticated()) return fail("登录状态已失效，请重新登录", 401);
     if (method !== "GET") return fail(READ_ONLY, 403);
 
     const servers = demoServersAt();
@@ -115,7 +115,7 @@ export function createDemoRequest(store?: SessionStore) {
       case "/api/admin/sessions": {
         const now = Math.floor(Date.now() / 1000);
         return Response.json({ sessions: [{
-          id: "demo-session", ip_address: "192.0.2.1", user_agent: "NodeFlare Demo",
+          id: "demo-session", ip_address: "192.0.2.1", user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
           created_at: now - 300, last_seen_at: now, expires_at: now + 86400, current: true,
         }] });
       }
@@ -124,7 +124,7 @@ export function createDemoRequest(store?: SessionStore) {
     if (history) {
       const id = decodeURIComponent(history[2]);
       const server = servers.find((server) => server.id === id);
-      if (!server) return fail("演示节点不存在", 404);
+      if (!server) return fail("节点不存在", 404);
       const hours = Math.min(720, Math.max(1, Number(url.searchParams.get("hours")) || 1));
       const tasks = demoLatencyTasks.filter((task) => server.latency.some((point) => point.task_id === task.id));
       return Response.json(history[1] === "history"

@@ -1,6 +1,6 @@
 # Repository Layout
 
-The NodeFlare main repository is organized as follows:
+The NodeFlare main repository:
 
 | Directory | Contents |
 | --- | --- |
@@ -13,4 +13,4 @@ The NodeFlare main repository is organized as follows:
 | `docker/` | Example config for Docker deployments (container paths and listen address) |
 | `Dockerfile` | Image build: frontend assets + statically linked Rust binary → Alpine runtime |
 
-This wiki's sources live in the [NodeFlareWiki](https://github.com/elysia62/NodeFlareWiki) repository, built with VitePress. Pull requests to improve the docs are welcome.
+This wiki's sources live in the [NodeFlareWiki](https://github.com/elysia62/NodeFlareWiki) repository, built with VitePress. Pull requests are welcome.

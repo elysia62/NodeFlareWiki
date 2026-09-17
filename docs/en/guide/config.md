@@ -17,7 +17,7 @@ The config file lives in the platform's [default path](/en/guide/platforms#defau
 | `theme_dir` | Directory where theme ZIPs are extracted, `themes` inside the config directory by default — see [Theme Development](/en/guide/themes) |
 
 ::: tip
-These Docker examples use `/etc/nodeflare/config.toml` on the host, mounted at the same path inside the container. The file must be readable and writable by container user `10001:10001`; keep `bind_addr` at `0.0.0.0:2206` — see [Docker Deployment](/en/guide/docker#prepare-the-config).
+Docker deployments use `/etc/nodeflare/config.toml` on the host, mounted at the same path inside the container. The file must be readable and writable by container user `10001:10001`, and `bind_addr` must stay `0.0.0.0:2206` — see [Docker Deployment](/en/guide/docker#prepare-the-config).
 :::
 
 ## Command-line Overrides
@@ -34,7 +34,7 @@ Online migration is disabled when the server is started with `--database`.
 
 ## Full Example
 
-The complete `config.example.toml` (for a production install the config lives at `/etc/nodeflare/config.toml`; paths per platform are listed under [default paths](/en/guide/platforms#default-paths); Docker deployments use [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)):
+The complete `config.example.toml` (production installs live at `/etc/nodeflare/config.toml`; per-platform paths are under [default paths](/en/guide/platforms#default-paths); Docker deployments use [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)):
 
 ```toml
 # Database connection URL

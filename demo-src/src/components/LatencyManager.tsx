@@ -111,7 +111,7 @@ export function LatencyManager({
     event.preventDefault();
     const target = parseTarget(form.target, form.task_type);
     if (!target) {
-      onError(form.task_type === "icmp" ? ui(locale, "ICMP 节点应为公网域名或公网 IPv4，不使用端口", "An ICMP target must be a public hostname or public IPv4 address without a port") : ui(locale, "TCP 节点格式应为域名:端口或公网 IPv4:端口，端口范围为 1 至 65535", "A TCP target must be host:port or public IPv4:port with port 1-65535"));
+      onError(form.task_type === "icmp" ? ui(locale, "ICMP 目标应为公网域名或公网 IPv4，不带端口", "An ICMP target must be a public hostname or public IPv4 address without a port") : ui(locale, "TCP 目标格式为域名:端口或公网 IPv4:端口，端口范围 1–65535", "A TCP target must be host:port or public IPv4:port with port 1-65535"));
       return;
     }
     const input: LatencyTaskInput = { ...form, ...target };

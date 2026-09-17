@@ -5,9 +5,9 @@ hero:
   name: NodeFlare
   text: Lightweight self-hosted server monitoring
   tagline:
-    View server status in a web UI while a lightweight agent collects and pushes telemetry. Live metrics,
-    TCP/ICMP latency probing, Telegram alerts, remote execution, TOTP two-factor authentication, theme
-    customization, and SQLite / PostgreSQL support.
+    View server status in a web UI. A lightweight agent reports outbound, so no inbound ports are needed.
+    Live metrics, TCP/ICMP latency probing, Telegram alerts, remote execution, TOTP two-factor
+    authentication, theme customization, and SQLite / PostgreSQL support.
   actions:
     - theme: brand
       text: Get Started
@@ -29,13 +29,13 @@ hero:
 features:
   - icon: ⚡
     title: Lightweight & Efficient
-    details: CPU, memory, and network speed are sampled every second and uploaded in compressed batches every 3 seconds by default; slower metrics such as disks, GPU, and connection counts are cached separately.
+    details: CPU, memory, and network speed are sampled every second and uploaded in compressed batches every 3 seconds; slower metrics such as disks and GPU are cached separately.
   - icon: 📡
     title: Latency Probing
     details: TCP and ICMP probing tasks assigned per node, with per-carrier (China Telecom / Mobile / Unicom) display.
   - icon: 🔔
     title: Alerts & Notifications
-    details: CPU / memory / disk / bandwidth thresholds, offline, expiry, and traffic alerts delivered through Telegram with customizable message templates.
+    details: CPU / memory / disk / bandwidth thresholds, offline, expiry, and traffic alerts over Telegram with customizable templates.
   - icon: 🎨
     title: Theme Store
     details: Bilingual public dashboard with built-in themes, one-click install from GitHub repositories, and local ZIP upload.
@@ -47,5 +47,5 @@ features:
     details: SQLite and PostgreSQL with online migration between them, one-click backup and restore, and automatic history cleanup by retention days.
   - icon: 🐳
     title: Container Ready
-    details: Official images run on x64 and ARM64 servers. Start the panel with one docker run or a Compose file, with config and data persisted on the host.
+    details: Official images run on x64 and ARM64. Deploy with one docker run or a Compose file; config and data persist on the host.
 ---

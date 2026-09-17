@@ -10,14 +10,14 @@
 | `bind_addr` | 监听地址，默认 `127.0.0.1:2206` |
 | `admin_username` | 管理员用户名 |
 | `admin_password` | 管理员密码（8–128 字符），仅首次初始化数据库需要，成功后自动清空 |
-| `trusted_proxies` | 可信反向代理 IP / CIDR 列表；只有来自这些网段的 `X-Forwarded-For` 才会被信任，详见[反向代理](/guide/proxy) |
+| `trusted_proxies` | 可信反向代理 IP / CIDR；仅这些网段的 `X-Forwarded-For` 才会被信任，详见[反向代理](/guide/proxy) |
 | `turnstile_site_key` / `turnstile_secret_key` | Cloudflare Turnstile 密钥，留空则禁用；可分别保护管理员登录与公开看板 |
 | `session_ttl_hours` | 会话有效期（1–2160 小时），默认 168 |
 | `frontend_dir` / `admin_frontend_dir` | 前端静态资源目录，相对路径按配置文件所在目录解析 |
 | `theme_dir` | 主题解压目录，默认配置目录下的 `themes`，详见[主题开发](/guide/themes) |
 
 ::: tip
-Docker 部署示例使用宿主机的 `/etc/nodeflare/config.toml`，挂载到容器内的同一路径。配置文件需允许容器用户 `10001:10001` 读写，`bind_addr` 保持 `0.0.0.0:2206`，具体填法见 [Docker 部署](/guide/docker#准备配置)。
+Docker 部署使用宿主机 `/etc/nodeflare/config.toml`，挂载到容器内同一路径。文件需允许容器用户 `10001:10001` 读写，`bind_addr` 保持 `0.0.0.0:2206`，具体填法见 [Docker 部署](/guide/docker#准备配置)。
 :::
 
 ## 命令行参数
@@ -34,7 +34,7 @@ nodeflare --config <路径> --bind <地址> --database <URL>
 
 ## 完整示例
 
-以下为 `config.example.toml` 的完整内容（正式安装时配置写入 `/etc/nodeflare/config.toml`，各平台路径见[默认目录](/guide/platforms#默认目录)；Docker 部署使用 [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)）：
+以下为 `config.example.toml` 的完整内容（正式安装时配置位于 `/etc/nodeflare/config.toml`，各平台路径见[默认目录](/guide/platforms#默认目录)；Docker 部署使用 [`docker/config.example.toml`](https://github.com/elysia62/NodeFlare/blob/main/docker/config.example.toml)）：
 
 ```toml
 # 数据库连接 URL

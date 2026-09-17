@@ -24,9 +24,9 @@ Unblock-File "$env:TEMP\nodeflare-install.ps1"
 & "$env:TEMP\nodeflare-install.ps1"
 ```
 
-## First-time Initialization
+## First-time Setup
 
-The first install asks for:
+The installer asks for:
 
 - Admin username and password (8–128 characters)
 - Listen port (default `2206`)
@@ -51,7 +51,7 @@ The admin password is only needed for the initial database setup and is removed 
 
 Windows equivalents are `-Install` / `-Status` / `-Restart` / `-Uninstall [-Purge]`. See [Uninstall](/en/guide/uninstall) for the uninstall workflow.
 
-The commands above run a script already downloaded to disk; you can also pipe it directly, for example to check the service status:
+These commands assume the script is already on disk; to pipe it directly, append flags after `sh -s --`, for example to check the service status:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh | sudo sh -s -- --status
@@ -78,4 +78,4 @@ Then open `http://your-server-ip:2206/admin/login`; nodes and agents are configu
 
 ## Updating
 
-Re-run the install script to update. Config and data are preserved, downloads are verified by checksum, and a failed update automatically rolls back to the previous version.
+Re-run the install script to update; config and data are preserved. Installs and updates verify the release checksum and roll back automatically on failure.

@@ -1,6 +1,6 @@
 # 主题开发
 
-公开看板的主题是一个**纯静态 ZIP 包**：一个 `index.html` 入口加上任意静态资源，通过面板的公开数据接口获取节点数据并渲染。本文描述主题包的结构约束与数据接口。
+公开看板主题是一个**纯静态 ZIP 包**：一个 `index.html` 入口加上任意静态资源，通过面板的公开数据接口获取节点数据并渲染。本页描述主题包的结构约束与数据接口。
 
 ## 主题包结构
 
@@ -12,8 +12,8 @@ theme.zip
     └── app.css       # 其他静态资源，按需组织
 ```
 
-- `index.html` 必须位于 ZIP 根目录；如果所有文件都在同一个顶层目录内（如 `ocean/index.html`），安装时会自动以该目录为根。
-- 在 `index.html` 中用 `"/assets/xxx`（或 `'/assets/xxx`）的绝对路径引用资源，服务端会自动把前缀重写到实际的主题服务路径（`/__theme-active/…`，预览时为 `/__theme-preview/…`），无需关心部署细节。
+- `index.html` 必须位于 ZIP 根目录；全部文件都在同一顶层目录内时（如 `ocean/index.html`），安装时会自动以该目录为根。
+- 在 `index.html` 中用 `"/assets/xxx`（或 `'/assets/xxx`）绝对路径引用资源；服务端会自动把前缀重写到实际主题路径（`/__theme-active/…`，预览时为 `/__theme-preview/…`），无需关心部署细节。
 
 大小与数量限制：
 
@@ -29,7 +29,7 @@ theme.zip
 
 ## theme.json 设置表单
 
-`theme.json` 是可选的，用于在管理后台生成主题的**设置表单**，管理员填写的值会随 [Bootstrap 接口](#get-apibootstrap) 的 `config.theme_options` 下发（键值对，未设置时为默认值）。
+`theme.json` 可选，用于在管理后台生成主题的**设置表单**；管理员填写的值经 [Bootstrap 接口](#get-apibootstrap) 的 `config.theme_options` 下发（键值对，未设置时为默认值）。
 
 ```json
 {
@@ -70,7 +70,7 @@ theme.zip
 
 ## 数据接口
 
-所有接口相对面板根路径。当公开看板关闭或人机验证未通过时，`bootstrap` 会正常返回但 `access` 不是 `ok`，且 `servers` 为空数组；其余数据接口分别返回 401 / 403。
+所有接口相对面板根路径。公开看板关闭或人机验证未通过时，`bootstrap` 正常返回，但 `access` 不是 `ok` 且 `servers` 为空数组；其余数据接口分别返回 401 / 403。
 
 ### GET /api/bootstrap
 
@@ -133,7 +133,7 @@ WebSocket 实时通道，推送压缩后的实时上报帧（与 Agent 遥测同
 
 ## 安装与预览
 
-主题商店支持三种来源：内置主题、GitHub 仓库（读取 latest Release 中的 ZIP）、本地上传 ZIP。安装后可先**预览**再**激活**，预览与激活分别通过独立地址访问，互不影响线上看板。
+主题商店支持三种来源：内置主题、GitHub 仓库（读取 latest Release 中的 ZIP）、本地上传 ZIP。安装后可先**预览**再**激活**；预览与激活使用独立地址，互不影响线上看板。
 
 主题解压目录由 `theme_dir` 配置（默认配置目录下的 `themes`），见[配置](/guide/config#配置项)。
 

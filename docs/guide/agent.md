@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
 Windows 对应 `-Endpoint` / `-Token` / `-Interval` / `-Mirror` 与 `-Update` / `-Status` / `-Uninstall`。
 
 ::: tip
-Linux 使用 systemd 时，安装脚本将 Token 直接写入服务单元的 `Environment=NODEFLARE_AGENT_TOKEN=...`；`--update` 从该服务配置读取地址、Token 和历史保存间隔。
+Linux 使用 systemd 时，安装脚本将 Token 写入服务单元的 `Environment=NODEFLARE_AGENT_TOKEN=...`；`--update` 从该服务配置读取地址、Token 和历史保存间隔。
 :::
 
 ## 更新
@@ -45,4 +45,4 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
   | sudo sh -s -- --update
 ```
 
-更新会沿用已保存的地址与 Token，校验摘要，失败自动回滚。Windows 对应 `-Update`；macOS / FreeBSD 在对应安装脚本后加 `--update` 参数即可。
+更新沿用已保存的地址与 Token，校验摘要，失败自动回滚。Windows 对应 `-Update`；macOS / FreeBSD 在对应安装脚本后加 `--update` 即可。

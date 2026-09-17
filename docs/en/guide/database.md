@@ -1,17 +1,17 @@
 # Database & Backups
 
-NodeFlare supports both SQLite and PostgreSQL and can **migrate online** between them. Everything is managed from the **Database** page of the admin panel.
+NodeFlare supports SQLite and PostgreSQL and can **migrate online** between them. Everything is managed from the **Database** page of the admin panel.
 
 ## Database Management
 
 The Database page shows usage, reclaims space, exports / restores ZIP backups, and runs SQLite ↔ PostgreSQL migrations.
 
-- History is kept for 30 days by default and cleaned automatically by retention days;
-- Shortening the retention period or clearing history first significantly shrinks backups.
+- History is kept for 30 days by default and cleaned up automatically;
+- Shortening the retention period or clearing history shrinks backups significantly.
 
 ## Backup and Restore
 
-One-click backup / restore (ZIP). A backup contains settings, nodes, history, notifications, themes, tasks, and security configuration. For safety, backup operations require TOTP or password verification.
+One-click backup / restore (ZIP). Backups contain settings, nodes, history, notifications, themes, tasks, and security configuration. Backup operations require TOTP or password verification.
 
 Limits:
 
@@ -28,5 +28,5 @@ Notes on SQLite ↔ PostgreSQL migration:
 
 - Migration **overwrites the target database** and updates the connection string automatically;
 - Agent tokens are preserved;
-- The new database is used after a service restart;
-- Online migration is disabled when the server is started with the `--database` flag — see [Configuration](/en/guide/config#command-line-overrides).
+- It takes effect after a service restart;
+- Online migration is unavailable when the server starts with `--database` — see [Configuration](/en/guide/config#command-line-overrides).

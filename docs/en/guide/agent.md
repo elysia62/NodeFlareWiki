@@ -1,6 +1,6 @@
 # Install the Agent
 
-Create a node on the **Servers** page of the admin panel and run the install command shown in its dialog. The agent connects to the server over an outbound connection, so **no inbound ports need to be opened**.
+Create a node on the **Servers** page and run the install command shown in its dialog. The agent connects to the server outbound, so **no inbound ports are needed**.
 
 ## Linux
 
@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
 Windows equivalents: `-Endpoint` / `-Token` / `-Interval` / `-Mirror` and `-Update` / `-Status` / `-Uninstall`.
 
 ::: tip
-On Linux with systemd, the install script writes the token directly into the service unit as `Environment=NODEFLARE_AGENT_TOKEN=...`; `--update` reads the URL, token, and history interval back from that unit.
+On Linux with systemd, the install script writes the token into the service unit as `Environment=NODEFLARE_AGENT_TOKEN=...`; `--update` reads the URL, token, and history interval from that unit.
 :::
 
 ## Updating
@@ -45,4 +45,4 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
   | sudo sh -s -- --update
 ```
 
-The update reuses the saved URL and token, verifies checksums, and rolls back automatically on failure. Windows uses `-Update`; on macOS / FreeBSD append `--update` to the platform's install script.
+The update reuses the saved URL and token, verifies checksums, and rolls back automatically on failure. Windows uses `-Update`; on macOS / FreeBSD, append `--update` to the platform's install script.

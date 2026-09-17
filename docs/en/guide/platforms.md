@@ -11,7 +11,7 @@
 | Server | Docker | Matches the host architecture (x64 / ARM64) |
 | Agent | Linux / Windows / macOS / FreeBSD | Same as above (macOS: Apple Silicon only) |
 
-The install script auto-detects the service manager (systemd / OpenRC / launchd / FreeBSD rc / Windows scheduled task) and registers a boot-time service; Docker deployments start on boot via `restart unless-stopped` — see [Docker Deployment](/en/guide/docker).
+The install script detects the service manager (systemd / OpenRC / launchd / FreeBSD rc / Windows scheduled task) and registers a boot-time service; Docker deployments rely on `restart unless-stopped` — see [Docker Deployment](/en/guide/docker).
 
 ## Default Paths
 
@@ -25,7 +25,7 @@ The install script auto-detects the service manager (systemd / OpenRC / launchd 
 
 Agent (Linux): program at `/opt/nodeflare/agent`, config and state at `/etc/nodeflare/agent`. The SQLite file lives in the config directory.
 
-In these Docker examples, the config file is `/etc/nodeflare/config.toml` on both the host and the container. The directory and config file must be readable and writable by container user `10001:10001` — see [Docker Deployment](/en/guide/docker#prepare-the-config).
+In the Docker examples the config file is `/etc/nodeflare/config.toml` on both host and container. The directory and config file must be readable and writable by container user `10001:10001` — see [Docker Deployment](/en/guide/docker#prepare-the-config).
 
 ## Log Locations
 

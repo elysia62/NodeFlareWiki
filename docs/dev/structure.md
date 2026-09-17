@@ -1,6 +1,6 @@
 # 仓库结构
 
-NodeFlare 主仓库的目录结构如下：
+NodeFlare 主仓库的目录结构：
 
 | 目录 | 内容 |
 | --- | --- |
@@ -13,4 +13,4 @@ NodeFlare 主仓库的目录结构如下：
 | `docker/` | Docker 部署的配置示例（容器内路径与监听地址） |
 | `Dockerfile` | 镜像构建：前端资源 + 静态链接的 Rust 二进制 → Alpine 运行时 |
 
-本 Wiki 的源码位于 [NodeFlareWiki](https://github.com/elysia62/NodeFlareWiki) 仓库，基于 VitePress 构建，欢迎通过 Pull Request 补充文档。
+本 Wiki 的源码位于 [NodeFlareWiki](https://github.com/elysia62/NodeFlareWiki) 仓库，基于 VitePress 构建，欢迎提交 Pull Request 补充文档。

@@ -3,7 +3,7 @@
 ## Uninstall the Server
 
 ::: tip
-For Docker deployments, remove the container with `docker compose down` / `docker rm -f nodeflare`. The host mount directory (`/etc/nodeflare` in these examples) is preserved; see [Docker Deployment](/en/guide/docker#logs-and-uninstall) for data cleanup.
+Docker deployments: remove the container with `docker compose down` / `docker rm -f nodeflare`. The host mount directory (`/etc/nodeflare` in the examples) is preserved; see [Docker Deployment](/en/guide/docker#logs-and-uninstall) for data cleanup.
 :::
 
 Keep config and data (stops and removes the service only).
@@ -40,11 +40,11 @@ Unblock-File "$env:TEMP\nodeflare-install.ps1"
 `--purge` / `-Purge` deletes everything under the config directory, including the SQLite database, themes, and backups. To keep your data, export a backup from the **Database** page first — see [Database & Backups](/en/guide/database).
 :::
 
-Uninstalling also removes the registered service (systemd / OpenRC / launchd / FreeBSD rc / Windows scheduled task). Program and data paths per platform are listed in [Platforms & Paths](/en/guide/platforms#default-paths).
+Uninstalling also removes the registered service (systemd / OpenRC / launchd / FreeBSD rc / Windows scheduled task). Program and data paths per platform are in [Platforms & Paths](/en/guide/platforms#default-paths).
 
 ## Uninstall the Agent
 
-The agent install scripts on every platform accept `--uninstall` (`-Uninstall` on Windows). Linux for example:
+The agent install scripts accept `--uninstall` (`-Uninstall` on Windows). Linux example:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent.sh \
@@ -59,4 +59,4 @@ Unblock-File "$env:TEMP\nodeflare-agent-install.ps1"
 & "$env:TEMP\nodeflare-agent-install.ps1" -Uninstall
 ```
 
-Afterwards the node stops reporting and can be deleted from the **Servers** page of the admin panel. Agent program and state paths are listed in [Platforms & Paths](/en/guide/platforms#default-paths).
+Afterwards the node stops reporting and can be deleted from the **Servers** page. Agent program and state paths are in [Platforms & Paths](/en/guide/platforms#default-paths).

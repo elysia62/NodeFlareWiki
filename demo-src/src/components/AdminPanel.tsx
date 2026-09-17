@@ -359,7 +359,7 @@ export function AdminPanel({
       if (installCommand) await copyText(installCommand);
       setNotice(ui(locale, "安装命令已复制", "Install command copied"));
     } catch {
-      setError(ui(locale, "复制失败，请手动选择命令复制", "Copy failed; select and copy the command manually"));
+      setError(ui(locale, "复制失败，请手动复制命令", "Copy failed; copy the command manually"));
     }
   }
 
@@ -368,7 +368,7 @@ export function AdminPanel({
       await copyText(ip);
       setNotice(ui(locale, "IP 已复制", "IP copied"));
     } catch {
-      setError(ui(locale, "复制失败，请手动选择复制", "Copy failed; please copy it manually"));
+      setError(ui(locale, "复制失败，请手动复制", "Copy failed; copy it manually"));
     }
   }
 
@@ -457,7 +457,7 @@ export function AdminPanel({
   }
 
   async function sensitiveProof(action: string) {
-    if (!twoFactorStatus) throw new Error(ui(locale, "正在读取两步验证状态，请稍候", "Reading two-factor status, please wait"));
+    if (!twoFactorStatus) throw new Error(ui(locale, "正在读取两步验证状态", "Loading two-factor status"));
     const entered = await verificationDialog.ask(action, twoFactorStatus.enabled);
     if (entered === null) return null;
     if (twoFactorStatus.enabled) return { totpCode: entered };
@@ -470,7 +470,7 @@ export function AdminPanel({
     try {
       const result = await api.reclaimDatabase();
       setDatabase(result.database);
-      setNotice(result.reclaimed_bytes > 0 ? ui(locale, `已回收 ${formatBytes(result.reclaimed_bytes)}`, `Reclaimed ${formatBytes(result.reclaimed_bytes)}`) : ui(locale, "数据库已整理，当前没有可释放空间", "Database optimized; nothing to reclaim right now"));
+      setNotice(result.reclaimed_bytes > 0 ? ui(locale, `已回收 ${formatBytes(result.reclaimed_bytes)}`, `Reclaimed ${formatBytes(result.reclaimed_bytes)}`) : ui(locale, "数据库已整理，暂无可释放空间", "Database optimized; nothing to reclaim"));
     } catch (reason) { setError(reason instanceof Error ? reason.message : ui(locale, "回收数据库空间失败", "Failed to reclaim database space")); }
     finally { setBusy(false); }
   }
@@ -496,7 +496,7 @@ export function AdminPanel({
   }
 
   async function restartAfterDatabaseMigration() {
-    if (!database?.restart_required || !window.confirm(ui(locale, "立即重启 NodeFlare 并切换到新数据库？管理界面和 Agent 会短暂断开。", "Restart NodeFlare now and switch to the new database? The admin UI and agents will disconnect briefly."))) return;
+    if (!database?.restart_required || !window.confirm(ui(locale, "立即重启并切换到新数据库？管理界面与 Agent 会短暂断开。", "Restart now and switch to the new database? The admin UI and agents will disconnect briefly."))) return;
     const targetKind = databaseMigrationResult?.target_kind === "postgresql"
       ? "postgresql"
       : databaseMigrationResult?.target_kind === "sqlite"
@@ -549,7 +549,7 @@ export function AdminPanel({
       setError(ui(locale, "数据库备份 ZIP 不能超过 512 MiB", "Database backup ZIP must not exceed 512 MiB"));
       return;
     }
-    if (!window.confirm(ui(locale, "恢复将覆盖当前数据库，并使现有登录会话失效。确认继续？", "Restoring overwrites the current database and invalidates existing sessions. Continue?"))) return;
+    if (!window.confirm(ui(locale, "恢复会覆盖当前数据库并使现有会话失效，确认继续？", "Restoring overwrites the current database and invalidates existing sessions. Continue?"))) return;
     setBusy(true); setError(""); setNotice("");
     try {
       const proof = await sensitiveProof(ui(locale, "恢复备份", "Restore backup"));
@@ -682,7 +682,7 @@ export function AdminPanel({
       setTwoFactorSetup(setup);
       setTwoFactorStatus({ enabled: false, has_secret: true });
       setTwoFactorSecretCopied(false);
-      setNotice(ui(locale, "两步验证密钥已生成，请先加入验证器再启用", "Two-factor secret generated; add it to your authenticator before enabling"));
+      setNotice(ui(locale, "密钥已生成，请先加入验证器再启用", "Secret generated; add it to your authenticator before enabling"));
     } catch (reason) { setError(reason instanceof Error ? reason.message : ui(locale, "生成两步验证密钥失败", "Failed to generate the two-factor secret")); }
     finally { setBusy(false); }
   }
@@ -721,7 +721,7 @@ export function AdminPanel({
       await copyText(twoFactorSetup.secret);
       setTwoFactorSecretCopied(true);
     } catch {
-      setError(ui(locale, "复制失败，请手动选择复制", "Copy failed; please copy it manually"));
+      setError(ui(locale, "复制失败，请手动复制", "Copy failed; copy it manually"));
     }
   }
 
@@ -808,7 +808,7 @@ export function AdminPanel({
       return;
     }
     if (twoFactorStatus === null) {
-      setError(ui(locale, "正在读取两步验证状态，请稍候", "Reading two-factor status, please wait"));
+      setError(ui(locale, "正在读取两步验证状态", "Loading two-factor status"));
       return;
     }
     if (!twoFactorStatus.enabled) {
@@ -845,11 +845,11 @@ export function AdminPanel({
       setRemoteTasks(tasks);
       setRemotePollingUntil(Date.now() + REMOTE_TASK_POLL_TIMEOUT_MS);
       setRemoteCommand("");
-      setNotice(ui(locale, "已提交命令，请查看各节点的执行结果", "Command submitted; check each node for results"));
+      setNotice(ui(locale, "命令已提交，结果见下方", "Command submitted; see the results below"));
       await refreshRemoteTasks(true, true);
     } catch (err) {
       setError(err instanceof Error && err.name === "TimeoutError"
-        ? ui(locale, "下发请求超时，命令可能已提交，请先检查节点，避免重复执行", "Dispatch timed out; the command may have been submitted. Check the nodes before retrying")
+        ? ui(locale, "下发超时，命令可能已提交，请先检查节点，避免重复执行", "Dispatch timed out; the command may have been submitted. Check the nodes before retrying")
         : err instanceof Error ? err.message : ui(locale, "下发命令失败", "Failed to dispatch the command"));
     } finally {
       setBusy(false);
@@ -974,7 +974,7 @@ export function AdminPanel({
               </nav>
             </aside>
             <div className="admin-content">
-              <header className="admin-content-header"><h1>{pages[tab].title}</h1><p>{pages[tab].description}</p>{demoMode ? <p className="admin-demo-note" role="note"><Eye size={13} aria-hidden="true" />{ui(locale, "演示环境仅供浏览，修改和执行操作已禁用。", "This demo is read-only; editing and execution are disabled.")}</p> : null}</header>
+              <header className="admin-content-header"><h1>{pages[tab].title}</h1><p>{pages[tab].description}</p></header>
               {tab === "servers" ? (
                 <div className="admin-section">
                   <div className="section-head"><div><h3>{ui(locale, "监控节点", "Monitored servers")}</h3><span>{ui(locale, `${servers.length} 个节点 · 可拖动上下排序`, `${servers.length} server(s) · drag to reorder`)}</span></div><div className="section-actions"><button className="primary-btn compact" onClick={() => openEditor()}><Plus size={15} />{ui(locale, "添加", "Add")}</button></div></div>
@@ -1017,12 +1017,12 @@ export function AdminPanel({
                     </div>
                   </section>
                   <form className="admin-section theme-add-form" onSubmit={addTheme}>
-                    <div className="section-head"><div><h3>{ui(locale, "安装主题", "Install theme")}</h3><span>{ui(locale, "主题包含可执行前端代码，只安装可信来源；安装后不依赖运行时远程资源。", "Themes contain executable frontend code; install only from trusted sources. No runtime remote resources are needed after installation.")}</span></div></div>
+                    <div className="section-head"><div><h3>{ui(locale, "安装主题", "Install theme")}</h3><span>{ui(locale, "主题包含可执行前端代码，请只安装可信来源。", "Themes run executable frontend code; install from trusted sources only.")}</span></div></div>
                     <div className="segmented theme-source-tabs" role="group" aria-label={ui(locale, "主题安装来源", "Theme install source")}>
                       <button type="button" className={themeSourceMode === "repository" ? "active" : ""} aria-pressed={themeSourceMode === "repository"} onClick={() => setThemeSourceMode("repository")}>{ui(locale, "GitHub 仓库", "GitHub repository")}</button>
                       <button type="button" className={themeSourceMode === "upload" ? "active" : ""} aria-pressed={themeSourceMode === "upload"} onClick={() => setThemeSourceMode("upload")}>{ui(locale, "上传", "Upload")}</button>
                     </div>
-                    <p className="settings-hint">{themeSourceMode === "repository" ? ui(locale, "填写仓库主页地址，NodeFlare 会下载 latest Release 中的第一个 ZIP 文件。", "Enter the repository URL; NodeFlare downloads the first ZIP asset of the latest release.") : ui(locale, "ZIP 根目录需包含 index.html，也支持外层只有一个目录的打包方式；最大 32 MiB。", "The ZIP must contain index.html at its root (a single wrapping directory is fine); max 32 MiB.")}</p>
+                    <p className="settings-hint">{themeSourceMode === "repository" ? ui(locale, "填写仓库主页地址，将下载 latest Release 中的第一个 ZIP 文件。", "Enter the repository URL; the first ZIP asset of the latest release is downloaded.") : ui(locale, "ZIP 根目录需包含 index.html（允许外层套一个目录），最大 32 MiB。", "The ZIP must contain index.html at its root (a single wrapping directory is allowed); max 32 MiB.")}</p>
                     <div className="form-grid"><label><span>{ui(locale, "主题名称", "Theme name")}</span><input required maxLength={80} value={themeName} onChange={(event) => setThemeName(event.target.value)} placeholder={ui(locale, "例如：Ocean", "e.g. Ocean")} /></label>{themeSourceMode === "repository" ? <label><span>{ui(locale, "GitHub 仓库", "GitHub repository")}</span><input required type="url" maxLength={2048} value={themeUrl} onChange={(event) => setThemeUrl(event.target.value)} placeholder="https://github.com/user/theme" /></label> : <label className="theme-file-field"><span>{ui(locale, "文件", "File")}</span><input ref={themeFileInputRef} required type="file" accept=".zip,application/zip" onChange={(event) => setThemeFile(event.target.files?.[0] ?? null)} /><small>{themeFile ? `${themeFile.name} · ${(themeFile.size / 1024 / 1024).toFixed(2)} MiB` : ui(locale, "请选择 .zip 文件", "Choose a .zip file")}</small></label>}</div>
                     <label><span>{ui(locale, "主题说明（可选）", "Theme description (optional)")}</span><textarea rows={2} maxLength={300} value={themeDescription} onChange={(event) => setThemeDescription(event.target.value)} placeholder={ui(locale, "简短描述主题风格和来源", "Briefly describe the style and source")} /></label>
                     <div className="form-actions"><button className="primary-btn" disabled={busy || (themeSourceMode === "upload" && !themeFile)}>{themeSourceMode === "upload" ? <Upload size={15} /> : <Download size={15} />}{busy ? ui(locale, "安装中", "Installing") : ui(locale, "安装主题", "Install theme")}</button></div>

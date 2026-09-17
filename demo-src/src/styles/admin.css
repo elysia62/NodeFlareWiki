@@ -490,7 +490,3 @@
 /* 登录页演示账号提示 */
 .login-demo-hint { display: flex; align-items: center; gap: 7px; margin: 0; border: 1px dashed var(--admin-border-strong); border-radius: 7px; padding: 9px 11px; color: var(--admin-muted); font-size: 13px; line-height: 1.5; }
 .login-demo-hint svg { flex: 0 0 auto; color: var(--admin-accent); }
-
-/* 内容区只读说明 */
-.admin-demo-note { display: flex; align-items: center; gap: 6px; margin: 8px 0 0; color: var(--admin-muted); font-size: 12px; }
-.admin-demo-note svg { flex: 0 0 auto; color: var(--admin-accent); }

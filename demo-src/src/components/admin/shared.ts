@@ -19,12 +19,12 @@ export function adminPages(locale: UiLocale | string | undefined): Record<AdminT
   return {
     servers: { title: ui(locale, "服务器", "Servers"), description: ui(locale, "管理监控节点和运行参数", "Manage monitored nodes and runtime parameters") },
     latency: { title: ui(locale, "延迟检测", "Latency checks"), description: ui(locale, "配置分配给各服务器的 TCP 与 ICMP 延迟任务", "Configure TCP and ICMP latency tasks assigned to each server") },
-    appearance: { title: ui(locale, "站点设置", "Site settings"), description: ui(locale, "调整站点信息、公开内容和前台显示项目", "Adjust site info, public content and dashboard display options") },
+    appearance: { title: ui(locale, "站点设置", "Site settings"), description: ui(locale, "配置站点信息、公开内容与显示项", "Configure site info, public content, and visible sections") },
     themes: { title: ui(locale, "主题商店", "Theme store"), description: ui(locale, "选择内置主题或安装本地主题包", "Choose the built-in theme or install a local theme package") },
-    themeSettings: { title: ui(locale, "主题设置", "Theme settings"), description: ui(locale, "调整当前前端主题提供的显示选项", "Adjust display options provided by the active frontend theme") },
+    themeSettings: { title: ui(locale, "主题设置", "Theme settings"), description: ui(locale, "调整当前主题的显示选项", "Adjust display options provided by the active theme") },
     alerts: { title: ui(locale, "通知", "Notifications"), description: ui(locale, "配置 Telegram 通知和资源告警阈值", "Configure Telegram notifications and resource alert thresholds") },
     security: { title: ui(locale, "登录与安全", "Sign-in & security"), description: ui(locale, "管理管理员账号、登录设备和安全验证", "Manage the admin account, signed-in devices and security checks") },
-    data: { title: ui(locale, "数据库", "Database"), description: ui(locale, "查看空间、备份恢复和迁移数据库", "Inspect usage, back up, restore and migrate the database") },
+    data: { title: ui(locale, "数据库", "Database"), description: ui(locale, "查看占用、备份恢复与迁移数据库", "Inspect usage, back up, restore, and migrate the database") },
     remote: { title: ui(locale, "远程执行", "Remote execution"), description: ui(locale, "输入命令并执行", "Enter a command and run it") },
     about: { title: ui(locale, "关于", "About"), description: ui(locale, "版本信息与项目地址", "Version info and project links") },
   };

@@ -1,6 +1,6 @@
 # Theme Development
 
-A public-dashboard theme is a **pure static ZIP package**: an `index.html` entry plus arbitrary static assets that fetch node data from the panel's public API. This page describes the package layout and the data interface.
+A public-dashboard theme is a **pure static ZIP package**: an `index.html` entry plus static assets that fetch node data from the panel's public API. This page covers the package layout and the data interface.
 
 ## Package Layout
 
@@ -29,7 +29,7 @@ Other constraints: symlinks and special files are rejected; `__MACOSX` directori
 
 ## theme.json Settings Form
 
-`theme.json` is optional and generates a **settings form** for the theme in the admin panel. The values the admin fills in are delivered through `config.theme_options` in the [Bootstrap API](#get-apibootstrap) (a key–value map; unset keys fall back to defaults).
+`theme.json` is optional and generates the theme's **settings form** in the admin panel. Values are delivered through `config.theme_options` in the [Bootstrap API](#get-apibootstrap) (a key–value map; unset keys fall back to defaults).
 
 ```json
 {
@@ -70,7 +70,7 @@ Each setting:
 
 ## Data API
 
-All endpoints are relative to the panel root. When the public dashboard is disabled or the human-verification challenge hasn't been passed, `bootstrap` still returns but `access` is not `ok` and `servers` is empty; the other data endpoints answer 401 / 403 respectively.
+All endpoints are relative to the panel root. When the public dashboard is disabled or the human-verification challenge hasn't been passed, `bootstrap` still returns, but `access` is not `ok` and `servers` is empty; the other data endpoints answer 401 / 403 respectively.
 
 ### GET /api/bootstrap
 
@@ -133,7 +133,7 @@ A WebSocket channel pushing compressed real-time report frames (the same telemet
 
 ## Install and Preview
 
-The theme store offers three sources: built-in themes, GitHub repositories (reads the ZIP from the latest release), and local ZIP upload. After installing, you can **preview** before **activating**; preview and active each get their own URL so the live dashboard is never affected.
+The theme store offers three sources: built-in themes, GitHub repositories (reads the ZIP from the latest release), and local ZIP upload. After installing, **preview** before **activating**; preview and active use separate URLs, so the live dashboard is never affected.
 
 Themes are extracted into the directory configured by `theme_dir` (`themes` inside the config directory by default) — see [Configuration](/en/guide/config#options).
 

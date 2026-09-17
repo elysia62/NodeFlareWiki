@@ -2,7 +2,7 @@
 
 **[在线文档 →](https://elysia62.github.io/NodeFlareWiki/)**
 
-[NodeFlare](https://github.com/elysia62/NodeFlare) 的官方文档，基于 [VitePress](https://vitepress.dev) 构建，提供简体中文与 English 两个语言版本。
+[NodeFlare](https://github.com/elysia62/NodeFlare) 的官方文档，基于 [VitePress](https://vitepress.dev) 构建，提供中文与英文两个语言版本。
 
 ## 文档目录
 
@@ -13,7 +13,7 @@
 
 ## 参与贡献
 
-发现文档错误或缺漏，欢迎提 [Issue](https://github.com/elysia62/NodeFlareWiki/issues)，或直接修改 `docs/` 下对应页面提交 Pull Request（文档页底部有「在 GitHub 上编辑此页」入口）。
+发现文档错误或缺漏，欢迎提 [Issue](https://github.com/elysia62/NodeFlareWiki/issues)，或修改 `docs/` 下对应页面提交 Pull Request（文档页底部有「在 GitHub 上编辑此页」入口）。
 
 ## 本地开发
 
@@ -22,6 +22,6 @@ bun install
 bun run docs:dev
 ```
 
-`demo-src/` 是公开看板的演示源码（来自 NodeFlare 前端 + 模拟数据），推送到 `main` 后由 CI 自动构建并挂载到 `/demo/` 路径。
+`demo-src/` 是公开看板与管理面板的演示源码（NodeFlare 前端 + 模拟数据），推送到 `main` 后由 CI 自动构建并挂载到 `/demo/` 路径。
 
 推送到 `main` 分支后由 CI（[deploy.yml](.github/workflows/deploy.yml)）自动构建并发布到 GitHub Pages。
