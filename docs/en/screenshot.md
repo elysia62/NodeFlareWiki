@@ -23,6 +23,6 @@ The live demo runs on simulated data — use it to get familiar with the UI befo
 
 ## Admin Panel
 
-Nodes, alerts, themes, and databases are all managed from the admin panel.
+Nodes, alerts, themes, and databases are all managed from the admin panel. You can also open the <a :href="withBase('/demo/admin.html#/admin/login')" target="_self">admin demo</a>: the username and password are both `admin`, and the panel is read-only — edits and executions are disabled.
 
 ![Admin panel](/images/backend.png)

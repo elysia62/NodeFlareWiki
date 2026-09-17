@@ -9,9 +9,8 @@ NodeFlare 提供官方镜像 `gxmandppx/nodeflare`（[Docker Hub](https://hub.do
 首次部署时，先在宿主机创建 `/etc/nodeflare`，下载配置示例并保存为 `config.toml`。容器启动时会读取该文件：
 
 ```bash
-sudo install -d -m 700 /etc/nodeflare
+sudo mkdir -p /etc/nodeflare
 sudo curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o /etc/nodeflare/config.toml
-sudo chmod 600 /etc/nodeflare/config.toml
 ```
 
 使用管理员权限编辑 `/etc/nodeflare/config.toml`，至少填好管理员账号密码：

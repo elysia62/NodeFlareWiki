@@ -22,7 +22,7 @@ import {
 } from "recharts";
 import { api } from "../api";
 import { chartGapLimit, chartTimeLabel, insertTimelineGaps } from "../chart";
-import { demoHistory, demoLatencyHistory, demoLatencyTasks } from "../demo";
+import { demoHistory, demoLatencyHistory, demoLatencyTasks, DEMO_REFRESH_INTERVAL_MS } from "../demo";
 import { averageOf } from "../latency";
 import { liveLatencySamples } from "../live";
 import { displayGpuDevices, formatBytes, formatCpuName, formatSpeed, formatUptime, isOnline, number } from "../format";
@@ -256,6 +256,18 @@ export function NodeDetails({ server, liveLatencyResults, threshold, retentionDa
     if (point) setPoints((current) => appendRealtimePoint(current, point));
   }, [demo, loadHours, liveTimestamp]);
 
+  // 演示模式下共享波形持续流动：定时把当前采样追加进实时曲线，
+  // 效果与真实部署的实时上报一致（指标每 3 秒循环变化）。
+  useEffect(() => {
+    if (!demo || loadHours !== 0) return;
+    const timer = window.setInterval(() => {
+      if (document.hidden || navigator.onLine === false) return;
+      const point = historyPointFromServer(latestServerRef.current);
+      if (point) setPoints((current) => appendRealtimePoint(current, point));
+    }, DEMO_REFRESH_INTERVAL_MS);
+    return () => window.clearInterval(timer);
+  }, [demo, loadHours]);
+
   useEffect(() => {
     setLatencyLoading(true);
     setLatencyError("");
@@ -309,15 +321,17 @@ export function NodeDetails({ server, liveLatencyResults, threshold, retentionDa
   const networkMaximum = useMemo(() => networkAxisMaximum(data), [data]);
   const networkTicks = useMemo(() => resourceTicks(networkMaximum), [networkMaximum]);
   const currentLatencyPoints = useMemo(() => {
-    if (demo || !latencyTasks.length) return latencyPoints;
+    if (!latencyTasks.length) return latencyPoints;
     const definitions = latencyTasks.map((task) => ({
       ...task, task_id: task.id, server_id: server.id, timestamp: 0, latency_ms: 0, packet_loss: 0,
     }));
+    // 演示模式的 server.latency 同样来自共享波形，合并后曲线会随时间流动，
+    // 与真实上报的行为保持一致。
     return mergeLatencySamples(latencyPoints, [
       ...server.latency,
       ...liveLatencySamples(definitions, liveLatencyResults),
     ], latencyHours, latencyTasks.length);
-  }, [demo, latencyHours, latencyPoints, latencyTasks, liveLatencyResults, server.id, server.latency]);
+  }, [latencyHours, latencyPoints, latencyTasks, liveLatencyResults, server.id, server.latency]);
   const latencySeries = useMemo(() => {
     return latencyTasks.map((task, index) => {
       const samples = currentLatencyPoints.filter((point) => point.task_id === task.id);

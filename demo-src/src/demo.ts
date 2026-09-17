@@ -24,7 +24,7 @@ export const demoConfig: Config = {
   show_latency: true,
   show_uptime: true,
   turnstile_enabled: false,
-  turnstile_login_enabled: true,
+  turnstile_login_enabled: false,
   totp_login_enabled: false,
   turnstile_site_key: "",
   password_client_salt: "nodeflare-demo-password-kdf",
@@ -144,59 +144,81 @@ export const demoServers: Server[] = [
   node({ id: "toronto-standby", name: "多伦多 Standby", region: "CA", group_name: "备用节点", tags: "Standby", price: 16, currency: "CAD", expires_at: now + 18 * 86400, timestamp: now - 640, cpu: 0, net_in: 0, net_out: 0 }),
 ];
 
-export function demoHistory(serverId: string, hours: number): HistoryPoint[] {
+export const DEMO_REFRESH_INTERVAL_MS = 3_000;
+export const DEMO_CYCLE_SECONDS = 120;
+
+function sampleServer(server: Server, at: number): Server {
+  const elapsed = Math.max(0, at - now);
+  const online = server.id !== "toronto-standby";
+  // A shared, time-based waveform keeps cards and history in sync. Values loop,
+  // while timestamps, uptime and traffic counters continue moving forward.
+  const seed = [...server.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const phase = ((at % DEMO_CYCLE_SECONDS) / DEMO_CYCLE_SECONDS) * Math.PI * 2 + seed;
+  const wave = Math.sin(phase);
+  const pulse = Math.cos(phase * 2);
+  return {
+    ...server,
+    timestamp: online ? at : at - 640,
+    cpu: online ? Math.round(Math.max(2, Math.min(96, (server.cpu ?? 24) + wave * 15 + pulse * 4))) : 0,
+    load1: Math.max(0.01, (server.load1 ?? 0.4) + wave * 0.25),
+    load5: Math.max(0.01, (server.load5 ?? 0.35) + wave * 0.15),
+    load15: Math.max(0.01, (server.load15 ?? 0.27) + pulse * 0.1),
+    mem_used: Math.round((server.mem_used ?? 0) * (1 + wave * 0.12)),
+    disk_used: Math.round((server.disk_used ?? 0) * (1 + pulse * 0.004)),
+    net_in: online ? Math.round((server.net_in ?? 0) * (1 + wave * 0.65)) : 0,
+    net_out: online ? Math.round((server.net_out ?? 0) * (1 + pulse * 0.55)) : 0,
+    net_rx_total: (server.net_rx_total ?? 0) + Math.round(elapsed * (server.net_in ?? 0)),
+    net_tx_total: (server.net_tx_total ?? 0) + Math.round(elapsed * (server.net_out ?? 0)),
+    uptime: (server.uptime ?? 0) + (online ? elapsed : 0),
+    processes: Math.round((server.processes ?? 126) + wave * 8),
+    tcp_connections: Math.round((server.tcp_connections ?? 342) + pulse * 35),
+    disk_read_bps: Math.round((server.disk_read_bps ?? 0) * (1 + wave * 0.4)),
+    disk_write_bps: Math.round((server.disk_write_bps ?? 0) * (1 + pulse * 0.4)),
+    latency: server.latency.map((point, index) => ({
+      ...point,
+      timestamp: online ? at : at - 640,
+      latency_ms: Math.round((38 + index * 7 + Math.sin(phase + index) * 6) * 10) / 10,
+      packet_loss: index === 1 ? Math.round((0.5 + wave * 0.4) * 10) / 10 : 0,
+    })),
+  };
+}
+
+export function demoServersAt(at = Math.floor(Date.now() / 1000)): Server[] {
+  return demoServers.map((server) => sampleServer(server, at));
+}
+
+export function demoHistory(serverId: string, hours: number, at = Math.floor(Date.now() / 1000)): HistoryPoint[] {
   const count = Math.min(180, Math.max(30, hours * 6));
   const step = Math.max(60, Math.floor((hours * 3600) / count));
-  const seed = [...serverId].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const server = demoServers.find((server) => server.id === serverId);
+  if (!server) return [];
   return Array.from({ length: count }, (_, index) => {
-    const wave = Math.sin((index + seed) / 7);
-    const pulse = Math.cos((index + seed) / 13);
+    const timestamp = at - (count - index - 1) * step;
+    const sampled = sampleServer(server, timestamp);
     return {
-      timestamp: now - (count - index - 1) * step,
-      cpu: Math.max(2, Math.min(96, 34 + wave * 18 + pulse * 7)),
-      load1: 0.8 + wave * 0.45,
-      load5: 0.72 + wave * 0.32,
-      load15: 0.64 + pulse * 0.24,
-      mem_used: (6.2 + wave * 0.45) * 1024 ** 3,
-      mem_total: 16 * 1024 ** 3,
-      swap_used: 0.2 * 1024 ** 3,
-      swap_total: 2 * 1024 ** 3,
-      disk_used: (84 + index / count) * 1024 ** 3,
-      disk_total: 224 * 1024 ** 3,
-      net_in: Math.max(0, (8 + wave * 5) * 1024 ** 2),
-      net_out: Math.max(0, (3 + pulse * 2) * 1024 ** 2),
-      net_rx_total: (800 + index) * 1024 ** 3,
-      net_tx_total: (300 + index * 0.5) * 1024 ** 3,
-      processes: 142 + Math.round(wave * 8),
-      tcp_connections: 380 + Math.round(pulse * 55),
-      udp_connections: 21,
-      gpu_usage: 0,
-      disk_read_bps: Math.max(0, (5 + wave * 3) * 1024 ** 2),
-      disk_write_bps: Math.max(0, (2 + pulse) * 1024 ** 2),
-      disk_read_iops: 110 + wave * 30,
-      disk_write_iops: 45 + pulse * 12,
-      disk_await_ms: 1.2 + Math.abs(wave),
-      disk_utilization: 8 + Math.abs(pulse) * 12,
+      timestamp,
+      cpu: sampled.cpu ?? 0,
+      load1: sampled.load1 ?? 0, load5: sampled.load5 ?? 0, load15: sampled.load15 ?? 0,
+      mem_used: sampled.mem_used ?? 0, mem_total: sampled.mem_total ?? 0,
+      swap_used: sampled.swap_used ?? 0, swap_total: sampled.swap_total ?? 0,
+      disk_used: sampled.disk_used ?? 0, disk_total: sampled.disk_total ?? 0,
+      net_in: sampled.net_in ?? 0, net_out: sampled.net_out ?? 0,
+      net_rx_total: sampled.net_rx_total ?? 0, net_tx_total: sampled.net_tx_total ?? 0,
+      processes: sampled.processes ?? 0, tcp_connections: sampled.tcp_connections ?? 0,
+      udp_connections: sampled.udp_connections ?? 0, gpu_usage: sampled.gpu_usage ?? 0,
+      disk_read_bps: sampled.disk_read_bps ?? 0, disk_write_bps: sampled.disk_write_bps ?? 0,
+      disk_read_iops: sampled.disk_read_iops ?? 0, disk_write_iops: sampled.disk_write_iops ?? 0,
+      disk_await_ms: sampled.disk_await_ms ?? 0, disk_utilization: sampled.disk_utilization ?? 0,
     };
   });
 }
 
-export function demoLatencyHistory(serverId: string, hours: number): LatencySample[] {
+export function demoLatencyHistory(serverId: string, hours: number, at = Math.floor(Date.now() / 1000)): LatencySample[] {
   const count = Math.min(180, Math.max(30, hours * 6));
   const step = Math.max(60, Math.floor((hours * 3600) / count));
-  const seed = [...serverId].reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  return Array.from({ length: count }, (_, index) => demoLatencyTasks.map((task, taskIndex) => {
-    const wave = Math.sin((index + seed + taskIndex * 5) / 7);
-    return {
-      task_id: task.id,
-      server_id: serverId,
-      name: task.name,
-      task_type: task.task_type,
-      target: task.target,
-      port: task.port,
-      timestamp: now - (count - index - 1) * step,
-      latency_ms: 38 + taskIndex * 7 + wave * (4 + taskIndex),
-      packet_loss: (index + taskIndex * 9) % 37 === 0 ? 2 + taskIndex : 0,
-    };
-  })).flat();
+  const server = demoServers.find((server) => server.id === serverId);
+  if (!server) return [];
+  return Array.from({ length: count }, (_, index) =>
+    sampleServer(server, at - (count - index - 1) * step).latency,
+  ).flat();
 }

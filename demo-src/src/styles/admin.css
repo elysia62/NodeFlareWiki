@@ -66,7 +66,8 @@
 
 .admin-loading { display: grid; min-height: 100dvh; place-items: center; color: var(--admin-text); background: var(--admin-bg); font-size: 14px; }
 .admin-login-stage { position: relative; display: grid; min-height: 100dvh; place-items: center; background: var(--admin-bg); }
-.admin-login-theme { position: absolute; top: 22px; right: 26px; display: inline-flex; width: 38px; height: 38px; align-items: center; justify-content: center; border: 1px solid var(--admin-border); border-radius: 6px; color: var(--admin-text); background: var(--admin-surface); }
+.admin-login-actions { position: absolute; top: 22px; right: 26px; display: flex; gap: 8px; }
+.admin-login-theme { display: inline-flex; width: 38px; height: 38px; align-items: center; justify-content: center; border: 1px solid var(--admin-border); border-radius: 6px; color: var(--admin-text); background: var(--admin-surface); text-decoration: none; }
 .admin-login-theme:hover { background: var(--admin-hover); }
 
 .login-form { display: flex; width: min(410px, calc(100% - 32px)); align-items: stretch; flex-direction: column; gap: 16px; border: 1px solid var(--admin-border); border-radius: 8px; padding: 32px; background: var(--admin-surface); }
@@ -437,3 +438,59 @@
   .remote-2fa-required { grid-template-columns: auto minmax(0, 1fr); }
   .remote-2fa-required .secondary-btn { grid-column: 1 / -1; }
 }
+
+/* ===== 只读演示后台 =====
+   demoApi 已在 JS 层拒绝所有写请求（403）；这里的禁用只负责把按钮
+   和表单控件提前置灰，让演示用户在点击前就知道操作不可用。
+   只针对“会写入数据”的容器，导航、主题切换、退出登录、搜索、
+   展开折叠、登录表单等浏览功能不受影响。 */
+.demo-readonly .section-actions .primary-btn,
+.demo-readonly .latency-section .section-head .primary-btn,
+.demo-readonly .alert-rule-manager .section-head .primary-btn,
+.demo-readonly .alert-rule-row .icon-btn,
+.demo-readonly .alert-rule-row .checkbox-control input,
+.demo-readonly .batch-toolbar .danger-btn,
+.demo-readonly .row-actions button,
+.demo-readonly .drag-handle,
+.demo-readonly .theme-row-actions button,
+.demo-readonly .theme-add-form button,
+.demo-readonly .settings-form .form-actions button,
+.demo-readonly .telegram-actions button,
+.demo-readonly .two-factor-actions button,
+.demo-readonly .login-device-revoke,
+.demo-readonly .database-section-head button,
+.demo-readonly .database-storage button,
+.demo-readonly .database-migration button,
+.demo-readonly .usage-head-actions button:not(.usage-toggle),
+.demo-readonly .remote-submit { cursor: not-allowed; pointer-events: none; opacity: .55; }
+
+.demo-readonly .settings-form input:not([readonly]):not([aria-readonly="true"]),
+.demo-readonly .settings-form textarea,
+.demo-readonly .settings-form select,
+.demo-readonly .theme-add-form input,
+.demo-readonly .theme-add-form textarea,
+.demo-readonly .telegram-settings input,
+.demo-readonly .telegram-settings textarea,
+.demo-readonly .database-migration input,
+.demo-readonly .remote-execution-form textarea,
+.demo-readonly .remote-server-picker .checkbox-control input,
+.demo-readonly input[type="file"] { cursor: not-allowed; pointer-events: none; opacity: .55; }
+
+/* 浏览类控件保持可用：导航、主题切换、退出、搜索、展开、只读展示 */
+.demo-readonly .admin-topbar-actions button,
+.demo-readonly .admin-topbar-actions .admin-home-link,
+.demo-readonly .admin-tabs a,
+.demo-readonly .usage-toggle,
+.demo-readonly .admin-login-theme,
+.demo-readonly .admin-login-stage input,
+.demo-readonly .admin-login-stage .login-submit { cursor: auto; pointer-events: auto; opacity: 1; }
+/* 展开汇率表 / 收起 一类的展开按钮也是浏览功能 */
+.demo-readonly .usage-head-actions .secondary-btn.compact:not(.usage-toggle) { cursor: not-allowed; }
+
+/* 登录页演示账号提示 */
+.login-demo-hint { display: flex; align-items: center; gap: 7px; margin: 0; border: 1px dashed var(--admin-border-strong); border-radius: 7px; padding: 9px 11px; color: var(--admin-muted); font-size: 13px; line-height: 1.5; }
+.login-demo-hint svg { flex: 0 0 auto; color: var(--admin-accent); }
+
+/* 内容区只读说明 */
+.admin-demo-note { display: flex; align-items: center; gap: 6px; margin: 8px 0 0; color: var(--admin-muted); font-size: 12px; }
+.admin-demo-note svg { flex: 0 0 auto; color: var(--admin-accent); }

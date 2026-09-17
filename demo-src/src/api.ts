@@ -1,4 +1,5 @@
 import type { AdminServer, AlertRule, AlertRuleInput, Bootstrap, DatabaseMigrationResult, DatabaseStats, ExchangeRates, HistoryPoint, LatencySample, LatencyTask, LatencyTaskInput, LatencyTestPoint, LoginSession, RemoteTask, RemoteTaskCreated, RemoteTaskInput, ServerInput, Settings, TelegramSettings, TelegramSettingsInput, Theme, ThemeSettingsSchema, TotpSetup, TotpStatus } from "./types";
+import { demoMode } from "./demoMode";
 
 export const ADMIN_UNAUTHORIZED_EVENT = "nodeflare:admin-unauthorized";
 
@@ -11,7 +12,9 @@ export class ApiError extends Error {
 async function requestResponse(path: string, init: RequestInit = {}, admin = false): Promise<Response> {
   const headers = new Headers(init.headers);
   if (typeof init.body === "string" && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
-  const response = await fetch(path, { ...init, headers, credentials: "same-origin" });
+  const response = demoMode
+    ? await (await import("./demoApi")).demoRequest(path, init)
+    : await fetch(path, { ...init, headers, credentials: "same-origin" });
   if (!response.ok) {
     const payload = await response.json().catch(() => ({ error: response.statusText }));
     if (response.status === 401 && admin) {

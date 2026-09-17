@@ -62,9 +62,8 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh 
 官方镜像 `gxmandppx/nodeflare` 支持 amd64 / arm64。以下 Linux 部署示例将配置和本地数据保存在宿主机的 `/etc/nodeflare`：
 
 ```bash
-sudo install -d -m 700 /etc/nodeflare
+sudo mkdir -p /etc/nodeflare
 sudo curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o /etc/nodeflare/config.toml
-sudo chmod 600 /etc/nodeflare/config.toml
 # 编辑 /etc/nodeflare/config.toml，填好管理员账号密码
 sudo chown -R 10001:10001 /etc/nodeflare
 

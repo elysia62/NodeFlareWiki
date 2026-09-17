@@ -23,6 +23,6 @@ NodeFlare 由公开看板与管理后台两部分组成，均支持简体中文 
 
 ## 管理后台
 
-节点、告警、主题、数据库等均在管理后台完成配置。
+节点、告警、主题、数据库等均在管理后台完成配置。也可以直接打开<a :href="withBase('/demo/admin.html#/admin/login')" target="_self">后台演示</a>：演示账号和密码均为 `admin`，登录后仅供浏览，修改与执行操作已禁用。
 
 ![管理后台](/images/backend.png)

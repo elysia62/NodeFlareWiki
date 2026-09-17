@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { api, ApiError } from "./api";
-import { demoConfig, demoExchangeRates, demoServers } from "./demo";
+import { demoConfig, demoExchangeRates, demoServersAt, DEMO_REFRESH_INTERVAL_MS } from "./demo";
 import {
   applyBatch,
   createLivePlayback,
@@ -110,21 +110,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const carrierLatency = config.show_latency && themeToggle(config, "showCarrierLatency", false);
   useFavicon(configReady ? config.logo_url : undefined);
 
-  // 演示数据的时间戳固定在页面加载时刻，页面久开会被误判离线；
-  // 定时按真实流逝时间平移 timestamp，保持 7 台在线、1 台离线的演示状态
-  const demoClockRef = useRef(Math.floor(Date.now() / 1000));
+  // 演示数据由共享波形采样：每 3 秒重新采样一轮，CPU、内存、网速等指标
+  // 随时间循环波动，与详情页图表保持同步；卡片的离线判定复用通用逻辑。
+  const demoTickRef = useRef(0);
   useEffect(() => {
     if (!demoMode) return;
     const timer = window.setInterval(() => {
+      if (document.hidden || navigator.onLine === false) return;
       const at = Math.floor(Date.now() / 1000);
-      const elapsed = at - demoClockRef.current;
-      if (elapsed <= 0) return;
-      demoClockRef.current = at;
-      setServers((current) => current.map((server) => ({
-        ...server,
-        timestamp: server.timestamp == null ? null : server.timestamp + elapsed,
-      })));
-    }, 10000);
+      if (at === demoTickRef.current) return;
+      demoTickRef.current = at;
+      setServers(demoServersAt(at));
+    }, DEMO_REFRESH_INTERVAL_MS);
     return () => window.clearInterval(timer);
   }, []);
 
@@ -134,7 +131,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (demoMode) {
         setConfig(demoViewConfig);
         setConfigReady(true);
-        setServers(demoServers);
+        demoTickRef.current = Math.floor(Date.now() / 1000);
+        setServers(demoServersAt(demoTickRef.current));
         setExchangeRates(demoExchangeRates);
         setError("");
         setLoading(false);

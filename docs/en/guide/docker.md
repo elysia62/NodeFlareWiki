@@ -9,9 +9,8 @@ NodeFlare provides the official `gxmandppx/nodeflare` image ([Docker Hub](https:
 For the first deployment, create `/etc/nodeflare` on the host and download the example configuration as `config.toml`. The container reads this file at startup:
 
 ```bash
-sudo install -d -m 700 /etc/nodeflare
+sudo mkdir -p /etc/nodeflare
 sudo curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o /etc/nodeflare/config.toml
-sudo chmod 600 /etc/nodeflare/config.toml
 ```
 
 Edit `/etc/nodeflare/config.toml` with administrator privileges and at least set the admin account:

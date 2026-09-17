@@ -1,6 +1,16 @@
+import { demoMode } from "./demoMode";
+
 export type AdminTab = "servers" | "latency" | "appearance" | "themes" | "themeSettings" | "alerts" | "security" | "data" | "remote" | "about";
 
 export const ADMIN_LOGIN_PATH = "/admin/login";
+
+export function currentAdminPath() {
+  return demoMode ? window.location.hash.slice(1) : window.location.pathname;
+}
+
+export function adminRouteHref(path: string) {
+  return demoMode ? `#${path}` : path;
+}
 
 export const adminTabPaths: Record<AdminTab, string> = {
   servers: "/admin/servers",

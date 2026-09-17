@@ -62,9 +62,8 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/install.sh 
 The official `gxmandppx/nodeflare` image supports amd64 / arm64. This Linux deployment example stores configuration and local data in `/etc/nodeflare` on the host:
 
 ```bash
-sudo install -d -m 700 /etc/nodeflare
+sudo mkdir -p /etc/nodeflare
 sudo curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/docker/config.example.toml -o /etc/nodeflare/config.toml
-sudo chmod 600 /etc/nodeflare/config.toml
 # Edit /etc/nodeflare/config.toml and set the administrator username and password
 sudo chown -R 10001:10001 /etc/nodeflare
 

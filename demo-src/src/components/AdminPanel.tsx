@@ -22,10 +22,11 @@ import {
 import { ChangeEvent, DragEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ADMIN_UNAUTHORIZED_EVENT, api, ApiError } from "../api";
 import { ui } from "../locale";
-import { adminTabFromPath, adminTabPaths, canonicalAdminPath, type AdminTab } from "../adminRoutes";
+import { adminTabFromPath, adminTabPaths, canonicalAdminPath, currentAdminPath, adminRouteHref, type AdminTab } from "../adminRoutes";
 import { formatBytes, formatByteSize, parseByteSize } from "../format";
 import { derivePassword } from "../password";
 import { hasActiveRemoteTasks, isRemoteTaskActive, REMOTE_TASK_POLL_INTERVAL_MS, REMOTE_TASK_POLL_TIMEOUT_MS } from "../refresh";
+import { demoMode, dashboardHref } from "../demoMode";
 import { ASSET_CURRENCIES, type AdminServer, type Config, type DatabaseMigrationResult, type DatabaseStats, type ExchangeRates, type LoginSession, type RemoteTask, type ServerInput, type Settings, type Theme, type ThemeSettingsSchema, type ThemeSettingValue, type TotpSetup, type TotpStatus } from "../types";
 import { Checkbox } from "./Checkbox";
 import { LoginForm } from "./LoginForm";
@@ -97,7 +98,7 @@ export function AdminPanel({
   const navigation = adminNavigation(locale);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [tab, setTab] = useState<AdminTab>(() => adminTabFromPath(window.location.pathname));
+  const [tab, setTab] = useState<AdminTab>(() => adminTabFromPath(currentAdminPath()));
   const [servers, setServers] = useState<AdminServer[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [draggingId, setDraggingId] = useState("");
@@ -184,9 +185,10 @@ export function AdminPanel({
   useEffect(() => {
     if (!authChecked) return;
     const syncAdminPath = () => {
-      const canonicalPath = canonicalAdminPath(window.location.pathname, authenticated);
-      if (window.location.pathname !== canonicalPath) {
-        window.history.replaceState(null, "", canonicalPath);
+      const canonicalPath = canonicalAdminPath(currentAdminPath(), authenticated);
+      if (currentAdminPath() !== canonicalPath) {
+        if (demoMode) window.location.hash = canonicalPath;
+        else window.history.replaceState(null, "", canonicalPath);
       }
       setTab(adminTabFromPath(canonicalPath));
       setNotice("");
@@ -194,8 +196,8 @@ export function AdminPanel({
     };
     syncAdminPath();
     const handlePopState = () => syncAdminPath();
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
+    window.addEventListener(demoMode ? "hashchange" : "popstate", handlePopState);
+    return () => window.removeEventListener(demoMode ? "hashchange" : "popstate", handlePopState);
   }, [authChecked, authenticated]);
 
   // These loaders are ordinary functions recreated on every render. Route the
@@ -754,7 +756,10 @@ export function AdminPanel({
   } : current);
   const selectTab = (next: AdminTab) => {
     const path = adminTabPaths[next];
-    if (window.location.pathname !== path) window.history.pushState(null, "", path);
+    if (currentAdminPath() !== path) {
+      if (demoMode) window.location.hash = path;
+      else window.history.pushState(null, "", path);
+    }
     setTab(next);
     setNotice("");
     setError("");
@@ -915,15 +920,18 @@ export function AdminPanel({
   }, [authenticated, refreshRemoteTasks, remoteTasksActive, remotePollingUntil, tab]);
 
   if (!authChecked) {
-    return <div className={`admin-page ${dark ? "admin-dark" : ""}`} aria-busy="true" />;
+    return <div className={`admin-page ${dark ? "admin-dark" : ""} ${demoMode ? "demo-readonly" : ""}`} aria-busy="true" />;
   }
 
   return (
-    <div className={`admin-page ${dark ? "admin-dark" : ""}`}>
+    <div className={`admin-page ${dark ? "admin-dark" : ""} ${demoMode ? "demo-readonly" : ""}`}>
       {authenticated ? (error ? <div className="admin-toast error" role="alert" aria-live="assertive"><CircleAlert aria-hidden="true" /><span>{error}</span></div>
         : notice ? <div className="admin-toast" role="status" aria-live="polite"><CircleCheck aria-hidden="true" /><span>{notice}</span></div> : null) : null}
       {!authenticated ? <div className="admin-login-stage">
-        <button className="admin-login-theme" type="button" onClick={onToggleTheme} title={dark ? ui(locale, "切换浅色主题", "Switch to light theme") : ui(locale, "切换深色主题", "Switch to dark theme")}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
+        <div className="admin-login-actions">
+          <a className="admin-login-theme" href={dashboardHref} title={ui(locale, "返回看板", "Back to dashboard")} aria-label={ui(locale, "返回看板", "Back to dashboard")}><ArrowLeft size={15} /></a>
+          <button className="admin-login-theme" type="button" onClick={onToggleTheme} title={dark ? ui(locale, "切换浅色主题", "Switch to light theme") : ui(locale, "切换深色主题", "Switch to dark theme")}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
+        </div>
         <LoginForm
           config={config}
           dark={dark}
@@ -937,6 +945,7 @@ export function AdminPanel({
         >
           <SiteLogo src={siteLogoUrl} alt="" width="48" height="48" />
           <div className="login-copy"><h1>{ui(locale, "管理员登录", "Admin sign in")}</h1><p>{config.site_name}</p></div>
+          {demoMode ? <p className="login-demo-hint"><Eye size={14} aria-hidden="true" />{ui(locale, "账号和密码均为 admin", "Username and password: admin")}</p> : null}
         </LoginForm>
       </div> : <section className="admin-shell" aria-label={ui(locale, "管理面板", "Admin panel")}>
         <header className="admin-topbar">
@@ -946,7 +955,7 @@ export function AdminPanel({
           </div>
           <div className="admin-topbar-actions">
             <button type="button" onClick={onToggleTheme} title={dark ? ui(locale, "切换浅色主题", "Switch to light theme") : ui(locale, "切换深色主题", "Switch to dark theme")} aria-label={dark ? ui(locale, "切换浅色主题", "Switch to light theme") : ui(locale, "切换深色主题", "Switch to dark theme")}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
-            <a className="admin-home-link" href="/" target="_blank" rel="noopener noreferrer" title={ui(locale, "主页", "Home")} aria-label={ui(locale, "主页", "Home")}><ArrowLeft size={15} /></a>
+            <a className="admin-home-link" href={dashboardHref} target="_blank" rel="noopener noreferrer" title={ui(locale, "主页", "Home")} aria-label={ui(locale, "主页", "Home")}><ArrowLeft size={15} /></a>
             <button type="button" onClick={() => void logout()} title={ui(locale, "退出", "Sign out")} aria-label={ui(locale, "退出", "Sign out")}><LogOut size={15} /></button>
           </div>
         </header>
@@ -956,7 +965,7 @@ export function AdminPanel({
               <nav className="admin-tabs" aria-label={ui(locale, "管理导航", "Admin navigation")}>
                 {navigation.map((item) => {
                   const Icon = item.icon;
-                  return <a key={item.tab} href={adminTabPaths[item.tab]} className={tab === item.tab ? "active" : ""} aria-current={tab === item.tab ? "page" : undefined} onClick={(event) => {
+                  return <a key={item.tab} href={adminRouteHref(adminTabPaths[item.tab])} className={tab === item.tab ? "active" : ""} aria-current={tab === item.tab ? "page" : undefined} onClick={(event) => {
                     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
                     event.preventDefault();
                     selectTab(item.tab);
@@ -965,7 +974,7 @@ export function AdminPanel({
               </nav>
             </aside>
             <div className="admin-content">
-              <header className="admin-content-header"><h1>{pages[tab].title}</h1><p>{pages[tab].description}</p></header>
+              <header className="admin-content-header"><h1>{pages[tab].title}</h1><p>{pages[tab].description}</p>{demoMode ? <p className="admin-demo-note" role="note"><Eye size={13} aria-hidden="true" />{ui(locale, "演示环境仅供浏览，修改和执行操作已禁用。", "This demo is read-only; editing and execution are disabled.")}</p> : null}</header>
               {tab === "servers" ? (
                 <div className="admin-section">
                   <div className="section-head"><div><h3>{ui(locale, "监控节点", "Monitored servers")}</h3><span>{ui(locale, `${servers.length} 个节点 · 可拖动上下排序`, `${servers.length} server(s) · drag to reorder`)}</span></div><div className="section-actions"><button className="primary-btn compact" onClick={() => openEditor()}><Plus size={15} />{ui(locale, "添加", "Add")}</button></div></div>
