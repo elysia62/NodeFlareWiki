@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress'
 
+// External URLs pass through: withBase only prefixes paths inside the docs site.
 defineProps<{
   src: string
   alt?: string
@@ -10,8 +11,8 @@ defineProps<{
 </script>
 
 <template>
-  <!-- The demo is a standalone app; target bypasses VitePress routing. -->
-  <a class="demo-preview" :href="withBase(href)" target="_self">
+  <!-- The demo is a standalone app; target switches to a new tab. -->
+  <a class="demo-preview" :href="href" target="_blank" rel="noreferrer">
     <img :src="withBase(src)" :alt="alt" />
     <span class="demo-preview-badge">▶ {{ badge }}</span>
   </a>

@@ -22,6 +22,4 @@ bun install
 bun run docs:dev
 ```
 
-`demo-src/` 是公开看板与管理面板的演示源码（NodeFlare 前端 + 模拟数据），推送到 `main` 后由 CI 自动构建并挂载到 `/demo/` 路径。
-
 推送到 `main` 分支后由 CI（[deploy.yml](.github/workflows/deploy.yml)）自动构建并发布到 GitHub Pages。

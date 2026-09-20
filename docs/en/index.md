@@ -17,8 +17,8 @@ hero:
       link: /en/guide/docker
     - theme: alt
       text: Live Demo
-      link: /demo/
-      target: _self
+      link: https://dash.elysiaya.xyz
+      target: _blank
     - theme: alt
       text: FAQ
       link: /en/faq
