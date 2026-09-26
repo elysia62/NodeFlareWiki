@@ -16,7 +16,7 @@ hero:
       link: /guide/docker
     - theme: alt
       text: 在线演示
-      link: https://dash.elysiaya.xyz
+      link: https://dash.nodeflare.ong
       target: _blank
     - theme: alt
       text: 常见问题
