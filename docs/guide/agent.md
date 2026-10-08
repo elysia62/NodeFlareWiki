@@ -1,12 +1,12 @@
 # 安装 Agent
 
-在管理后台「服务器」页面创建节点，执行弹窗中的安装命令。Agent 主动出站连接服务端，**无需开放入站端口**。
+在管理后台「监控节点」页面创建节点，点击下载图标，选择目标系统并执行弹窗中的安装命令。Agent 主动出站连接服务端，**无需开放入站端口**。使用通过 HTTPS 反向代理访问的面板地址生成命令，勿把管理机器的 `127.0.0.1` 当成 Agent 能访问的地址。
 
 ## Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent.sh \
-  | sudo sh -s -- -e 'https://nodeflare.example.com' -t 'Agent Token'
+  | sudo sh -s -- -e 'https://nodeflare.example.com' -t 'Agent Token' --disable-remote
 ```
 
 ## 各平台脚本
@@ -26,11 +26,14 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
 | `-t` | Agent Token（必填） |
 | `-i` | 初始历史保存间隔，15–3600 秒（默认 60） |
 | `-m` | GitHub 下载加速前缀，如 `https://ghproxy.net`（可选） |
+| `--disable-remote` | 在本机服务启动参数中禁用远程执行；后台不能覆盖此限制 |
 | `--update` | 更新 Agent，沿用已保存的地址与 Token，校验摘要，失败回滚 |
 | `--status` | 查看 Agent 状态 |
 | `--uninstall` | 卸载 Agent |
 
-Windows 对应 `-Endpoint` / `-Token` / `-Interval` / `-Mirror` 与 `-Update` / `-Status` / `-Uninstall`。
+Windows 对应 `-Endpoint` / `-Token` / `-Interval` / `-Mirror` / `-DisableRemote` 与 `-Update` / `-Status` / `-Uninstall`。
+
+新节点默认关闭远程执行，安装命令会带上禁用参数。不带此参数的 Agent 允许接收远程任务，开启方式见[节点配置](/guide/nodes#远程执行)。此限制只针对远程执行，不会阻止正常监控上报。
 
 ::: tip
 Linux 使用 systemd 时，安装脚本将 Token 写入服务单元的 `Environment=NODEFLARE_AGENT_TOKEN=...`；`--update` 从该服务配置读取地址、Token 和历史保存间隔。
@@ -46,3 +49,5 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
 ```
 
 更新沿用已保存的地址与 Token，校验摘要，失败自动回滚。Windows 对应 `-Update`；macOS / FreeBSD 在对应安装脚本后加 `--update` 即可。
+
+`--update` 也会保留现有远程执行权限。更新完成后确认服务正在运行、节点重新上报；不要仅以安装命令退出成功判断面板已经收到数据。

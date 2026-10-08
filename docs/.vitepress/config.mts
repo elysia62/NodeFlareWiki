@@ -11,25 +11,28 @@ const zhSidebar = [
       { text: '界面预览', link: '/screenshot' },
       { text: '安装服务端', link: '/guide/quick-start' },
       { text: 'Docker 部署', link: '/guide/docker' },
+      { text: '反向代理', link: '/guide/proxy' },
       { text: '安装 Agent', link: '/guide/agent' },
       { text: '平台支持与默认目录', link: '/guide/platforms' },
       { text: '卸载', link: '/guide/uninstall' }
     ]
   },
   {
-    text: '使用指南',
+    text: '日常配置',
     items: [
-      { text: '配置', link: '/guide/config' },
+      { text: '登录与安全', link: '/guide/security' },
+      { text: '节点配置与远程执行', link: '/guide/nodes' },
       { text: '监控口径与采样', link: '/guide/monitoring' },
-      { text: '告警与通知', link: '/guide/alerts' },
+      { text: '流量统计', link: '/guide/traffic' },
+      { text: '通知', link: '/guide/alerts' },
       { text: '数据库与备份', link: '/guide/database' },
-      { text: '反向代理', link: '/guide/proxy' },
-      { text: '主题开发', link: '/guide/themes' }
+      { text: '服务端配置文件', link: '/guide/config' }
     ]
   },
   {
     text: '开发指南',
     items: [
+      { text: '主题开发', link: '/guide/themes' },
       { text: '开发环境', link: '/dev/develop' },
       { text: '仓库结构', link: '/dev/structure' }
     ]
@@ -47,25 +50,28 @@ const enSidebar = [
       { text: 'Screenshots', link: '/en/screenshot' },
       { text: 'Install the Server', link: '/en/guide/quick-start' },
       { text: 'Docker Deployment', link: '/en/guide/docker' },
+      { text: 'Reverse Proxy', link: '/en/guide/proxy' },
       { text: 'Install the Agent', link: '/en/guide/agent' },
       { text: 'Platforms & Paths', link: '/en/guide/platforms' },
       { text: 'Uninstall', link: '/en/guide/uninstall' }
     ]
   },
   {
-    text: 'Guide',
+    text: 'Configuration',
     items: [
-      { text: 'Configuration', link: '/en/guide/config' },
+      { text: 'Login & Security', link: '/en/guide/security' },
+      { text: 'Nodes & Remote Execution', link: '/en/guide/nodes' },
       { text: 'Metrics & Sampling', link: '/en/guide/monitoring' },
-      { text: 'Alerts & Notifications', link: '/en/guide/alerts' },
+      { text: 'Traffic Accounting', link: '/en/guide/traffic' },
+      { text: 'Notifications', link: '/en/guide/alerts' },
       { text: 'Database & Backups', link: '/en/guide/database' },
-      { text: 'Reverse Proxy', link: '/en/guide/proxy' },
-      { text: 'Theme Development', link: '/en/guide/themes' }
+      { text: 'Server Config File', link: '/en/guide/config' }
     ]
   },
   {
     text: 'Development',
     items: [
+      { text: 'Theme Development', link: '/en/guide/themes' },
       { text: 'Development Setup', link: '/en/dev/develop' },
       { text: 'Repository Layout', link: '/en/dev/structure' }
     ]
@@ -80,7 +86,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'NodeFlare',
   description:
-    '轻量级的自托管服务器监控面板：实时监控、TCP/ICMP 延迟拨测、Telegram 告警、远程执行、主题定制，支持 SQLite / PostgreSQL。',
+    '轻量级的自托管服务器监控面板：实时监控、TCP/ICMP 延迟拨测、Telegram / Bark / Discord 等多渠道通知、远程执行、主题定制，支持 SQLite / PostgreSQL。',
   base,
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}logo.svg` }],

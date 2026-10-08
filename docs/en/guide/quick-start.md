@@ -1,5 +1,7 @@
 # Install the Server
 
+For a first deployment: install the server → configure an HTTPS reverse proxy → sign in → create a node and install its agent → configure notifications and backups. The server and monitored nodes may be on different machines.
+
 The install script downloads the latest release automatically and registers a system service (systemd / OpenRC / launchd / FreeBSD rc / Windows scheduled task).
 
 ## One-line Install
@@ -79,3 +81,13 @@ Then open `http://your-server-ip:2206/admin/login`; nodes and agents are configu
 ## Updating
 
 Re-run the install script to update; config and data are preserved. Installs and updates verify the release checksum and roll back automatically on failure.
+
+## Next Steps
+
+1. Open `/admin/login` through the [reverse proxy](/en/guide/proxy) and sign in with the installation account.
+2. Review [Login & Security](/en/guide/security), enable TOTP and choose which entry points need bot protection.
+3. Create a node under **Servers**, use its download button to get the [agent command](/en/guide/agent), and run it on the monitored machine.
+4. Confirm live metrics arrive, then configure [traffic cycles](/en/guide/traffic) and [notification channels](/en/guide/alerts); test each channel.
+5. [Export a backup](/en/guide/database) from **Database** and keep a copy away from the panel's machine.
+
+For offline nodes or connection errors, check the [FAQ](/en/faq) and service logs. Loading the homepage alone does not prove WebSocket proxying works.

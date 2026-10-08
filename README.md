@@ -7,8 +7,9 @@
 ## 文档目录
 
 - [快速开始](https://elysia62.github.io/NodeFlareWiki/guide/quick-start.html)：界面预览、安装服务端 / Docker 部署 / Agent、平台支持、卸载
-- [使用指南](https://elysia62.github.io/NodeFlareWiki/guide/config.html)：配置、监控口径、告警、主题、数据库与备份、反向代理
-- [开发指南](https://elysia62.github.io/NodeFlareWiki/dev/develop.html)：本地开发、仓库结构
+- [日常配置](https://elysia62.github.io/NodeFlareWiki/guide/nodes.html)：登录与安全、节点与远程执行、监控采样、流量重置、通知、数据库与备份
+- [通知配置](https://elysia62.github.io/NodeFlareWiki/guide/alerts.html)：多选 Telegram / Bark / Discord 等渠道、消息模板、凭证与排错
+- [开发指南](https://elysia62.github.io/NodeFlareWiki/dev/develop.html)：本地开发、仓库结构、主题开发
 - [常见问题](https://elysia62.github.io/NodeFlareWiki/faq.html)
 
 ## 参与贡献
