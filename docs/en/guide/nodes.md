@@ -14,6 +14,19 @@ Use **Servers** in the admin panel to manage nodes, installation commands and di
 
 Drag a row's handle to change display order. IP addresses appear in the admin server list, not the public dashboard; tokens are not public either.
 
+### Asset figures on the dashboard
+
+The **Assets** and **Remaining value** tiles in the dashboard header are both derived from the price, billing cycle and expiry date above, but they measure different things:
+
+| Figure | Meaning |
+| --- | --- |
+| Assets | The prices of all paid nodes added together — what renewing everyone for one period costs |
+| Remaining value | What has been paid for but not yet consumed: the current billing period prorated by the time left, capped at one period |
+
+Remaining value is prorated and capped at a single billing cycle. A node at ¥30/month with half a month left counts as about ¥15; with three months left it still counts as ¥30, because only the next period has actually been paid for. Remaining value therefore **never exceeds assets**, and the closer the two are, the further out the expiries.
+
+Multi-currency totals are converted using daily exchange rates. Nodes whose rate is missing are left out and counted next to the label.
+
 ## Sampling and Traffic
 
 - **History write interval** defaults to 60 seconds and accepts 15–3600 seconds.
