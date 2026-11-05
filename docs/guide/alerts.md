@@ -31,6 +31,13 @@
 | 离线告警延迟 | 5 分钟 | 2～1440 分钟 |
 | 流量提醒起始阈值 | 80% | 50～100% |
 | 到期提醒 | 7 天 | 0～365 天；0 关闭到期提醒 |
+| 通知时区 | `Asia/Shanghai` | IANA 时区，例如 `UTC`、`America/Los_Angeles` |
+
+### 通知时间
+
+「通知时区」控制 Telegram 与所有 Webhook 模板中 `{{time}}` 的显示，默认北京时间 `Asia/Shanghai`。保存后，测试消息与自动告警都会使用该设置；不需要修改服务器或 Agent 的系统时区。
+
+时间格式为 `YYYY-MM-DD HH:mm:ss`，不附带时区名称。需要在消息中标注时区时，可在模板中添加固定文字，并与所选时区保持一致。节点的「流量重置时区」独立控制账期，不受此设置影响。
 
 ## Telegram
 
@@ -57,7 +64,7 @@ Telegram 使用文本模板；Bark、Discord 等渠道分别使用自己的 JSON
 | `{{node}}` | 节点名称，与 `{{server}}` 等价 | Webhook |
 | `{{event}}` | 事件标识：`offline`、`online`、`traffic`、`expiry`、`resource`、`resource_recovery`、`test` | Webhook |
 | `{{site}}` | 站点名称 | Webhook |
-| `{{time}}` | 发送时间，`YYYY-MM-DD HH:mm:ss UTC` | Telegram、Webhook |
+| `{{time}}` | 发送时间，按「通知时区」显示为 `YYYY-MM-DD HH:mm:ss` | Telegram、Webhook |
 
 Telegram 示例：
 

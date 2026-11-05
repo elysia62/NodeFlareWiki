@@ -51,3 +51,7 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
 更新沿用已保存的地址与 Token，校验摘要，失败自动回滚。Windows 对应 `-Update`；macOS / FreeBSD 在对应安装脚本后加 `--update` 即可。
 
 `--update` 也会保留现有远程执行权限。更新完成后确认服务正在运行、节点重新上报；不要仅以安装命令退出成功判断面板已经收到数据。
+
+## 连接与上报排障
+
+进程存活不代表上报成功。Agent 会自动重连并尝试补传未确认样本；长期断网会因队列上限丢失较早的数据。连接超时、握手错误、没有上传确认或重启后仍离线时，按 [Agent 离线排障](/guide/troubleshooting) 检查日志与网络。

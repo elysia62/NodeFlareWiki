@@ -14,7 +14,7 @@ The visitor-facing status dashboard; cards refresh every second. Click the image
 />
 
 ::: tip
-The live demo runs on simulated data — get familiar with the UI before setting up your own panel.
+The demo uses simulated data and shows China Telecom, China Unicom and China Mobile latency and packet loss by default. Explore node details and history charts; admin is read-only, so saving, deleting and remote execution are unavailable. Demo measurements do not represent real network quality.
 :::
 
 ## Admin Panel

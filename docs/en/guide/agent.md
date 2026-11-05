@@ -51,3 +51,7 @@ curl -fsSL https://raw.githubusercontent.com/elysia62/NodeFlare/main/agent/agent
 The update reuses the saved URL and token, verifies checksums, and rolls back automatically on failure. Windows uses `-Update`; on macOS / FreeBSD, append `--update` to the platform's install script.
 
 Updates also preserve existing remote execution permission. After an update, check the service and confirm new reports reach the panel; a successful installer exit alone does not confirm data delivery.
+
+## Connection and Reporting Problems
+
+A running process does not confirm delivery. The agent reconnects automatically and attempts to replay unconfirmed samples, but long outages can discard older data when queues fill. For connection timeouts, handshake errors, missing acknowledgements or continued outages after a restart, follow [Agent Troubleshooting](/en/guide/troubleshooting).

@@ -39,7 +39,10 @@ const zhSidebar = [
   },
   {
     text: '常见问题',
-    items: [{ text: 'FAQ', link: '/faq' }]
+    items: [
+      { text: 'Agent 离线排障', link: '/guide/troubleshooting' },
+      { text: 'FAQ', link: '/faq' }
+    ]
   }
 ]
 
@@ -78,7 +81,10 @@ const enSidebar = [
   },
   {
     text: 'Help',
-    items: [{ text: 'FAQ', link: '/en/faq' }]
+    items: [
+      { text: 'Agent Troubleshooting', link: '/en/guide/troubleshooting' },
+      { text: 'FAQ', link: '/en/faq' }
+    ]
   }
 ]
 
@@ -93,6 +99,27 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#11191f' }]
   ],
   lastUpdated: true,
+  themeConfig: {
+    search: {
+      provider: 'local',
+      options: {
+        locales: {
+          root: {
+            translations: {
+              button: { buttonText: '搜索文档', buttonAriaLabel: '搜索文档' },
+              modal: {
+                displayDetails: '显示详细列表',
+                noResultsText: '没有找到结果',
+                resetButtonTitle: '清除查询条件',
+                backButtonTitle: '关闭搜索',
+                footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   locales: {
     root: {
       label: '简体中文',
@@ -104,20 +131,6 @@ export default defineConfig({
         sidebar: zhSidebar,
 
         socialLinks: [{ icon: 'github', link: 'https://github.com/elysia62/NodeFlare' }],
-
-        search: {
-          provider: 'local',
-          options: {
-            translations: {
-              button: { buttonText: '搜索文档', buttonAriaLabel: '搜索文档' },
-              modal: {
-                noResultsText: '没有找到结果',
-                resetButtonTitle: '清除查询条件',
-                footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' }
-              }
-            }
-          }
-        },
 
         outline: { level: 'deep', label: '本页目录' },
         lastUpdated: { text: '最后更新于' },
@@ -149,8 +162,6 @@ export default defineConfig({
         sidebar: enSidebar,
 
         socialLinks: [{ icon: 'github', link: 'https://github.com/elysia62/NodeFlare' }],
-
-        search: { provider: 'local' },
 
         outline: { level: 'deep', label: 'On this page' },
         lastUpdated: { text: 'Last updated' },

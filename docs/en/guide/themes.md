@@ -29,7 +29,7 @@ Other constraints: symlinks and special files are rejected; `__MACOSX` directori
 
 ## theme.json Settings Form
 
-`theme.json` is optional and generates the theme's **settings form** in the admin panel. Values are delivered through `config.theme_options` in the [Bootstrap API](#get-apibootstrap) (a key–value map; unset keys fall back to defaults).
+`theme.json` is optional and generates the theme's **settings form** in the admin panel. Values are delivered through `config.theme_options` in the [Bootstrap API](#get-api-bootstrap) (a key–value map; unset keys fall back to defaults).
 
 ```json
 {
@@ -93,7 +93,7 @@ The dashboard's main endpoint, returning site config, the node list, and exchang
 | `logo_url` / `background_url` | Logo and background image |
 | `locale` | UI language (`zh-CN` / `en`) |
 | `public_dashboard` | Whether the public dashboard is enabled |
-| `offline_threshold_seconds` | Seconds after which a node is considered offline (used with `servers[].timestamp`) |
+| `offline_threshold_seconds` | Site-wide minimum offline window; prefer each node's `offline_after_seconds` |
 | `history_retention_days` | History retention in days |
 | `theme_options` | This theme's settings (key–value map declared in `theme.json`) |
 | `show_search` / `show_groups` / `show_stats` / `show_assets` / `show_traffic` / `show_speed` / `show_price` / `show_expiry` / `show_latency` / `show_uptime` | Admin "visible sections" switches; themes should honor them |
@@ -105,7 +105,8 @@ The dashboard's main endpoint, returning site config, the node list, and exchang
 | --- | --- |
 | `id` / `name` | Node ID and name; `id` is used by the history endpoints |
 | `region` / `group_name` / `tags` | Region, group, tags |
-| `timestamp` | Last report timestamp (seconds); combine with `offline_threshold_seconds` to determine liveness |
+| `timestamp` | Last report timestamp (seconds); combine with the node's `offline_after_seconds` to determine liveness |
+| `offline_after_seconds` | The greater of the site threshold and three times the live upload interval; fall back to the site threshold when older versions omit this field |
 | `cpu` / `cpu_cores` / `cpu_model` | CPU usage and info |
 | `load1` / `load5` / `load15` | Load averages |
 | `mem_used` / `mem_total` / `swap_used` / `swap_total` | Memory and swap (bytes) |

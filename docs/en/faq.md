@@ -14,9 +14,11 @@ No. The agent connects to the server outbound — see [Install the Agent](/en/gu
 
 ## The agent shows offline
 
-- Make sure the agent can reach the panel URL outbound: `curl -I https://your-panel-address`;
-- Verify the agent token;
-- Reporting and latency depend on clock accuracy; a large clock skew causes problems.
+Check whether the process is running, then test connectivity from the agent host and verify the token and system clock. `active/running` does not confirm delivery, and a working webpage does not establish a working WebSocket. See [Agent Troubleshooting](/en/guide/troubleshooting) for commands and error interpretation.
+
+## The agent keeps running but stops reporting, and a restart seems to help
+
+Capture logs during the failure before concluding that the process is stuck. The agent reconnects automatically, and an intermittent route may recover around the restart. Compare connection errors, persistence acknowledgements and the panel's last report time before and after restarting. See [Reconnection, Backlogs and Clocks](/en/guide/troubleshooting#_4-reconnection-backlogs-and-clocks).
 
 ## HTTP 426, or the homepage works but live updates do not
 
@@ -65,6 +67,10 @@ The agent samples every second and uploads several samples together every three 
 ## When does traffic reset? Must I change the OS timezone?
 
 No OS change is needed. Each node has its own **Traffic reset timezone**, defaulting to UTC. The new cycle starts at midnight on its reset day and is processed by a later report. Changing reset day or timezone creates a new baseline; see [Traffic Accounting](/en/guide/traffic).
+
+## Notification times are wrong. Should I change the server timezone?
+
+No. Select and save **Notification timezone** under **Notifications**; it defaults to `Asia/Shanghai`. It controls `{{time}}` in Telegram and Webhook templates independently of traffic reset timezones. See [Notification Time](/en/guide/alerts#notification-time).
 
 ## Why did reducing retention not immediately shrink the database file?
 

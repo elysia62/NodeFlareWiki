@@ -11,6 +11,7 @@
 - [通知配置](https://elysia62.github.io/NodeFlareWiki/guide/alerts.html)：多选 Telegram / Bark / Discord 等渠道、消息模板、凭证与排错
 - [开发指南](https://elysia62.github.io/NodeFlareWiki/dev/develop.html)：本地开发、仓库结构、主题开发
 - [常见问题](https://elysia62.github.io/NodeFlareWiki/faq.html)
+- [Agent 离线排障](https://elysia62.github.io/NodeFlareWiki/guide/troubleshooting.html)：连接超时、上传确认、自动重连与时钟检查
 
 ## 参与贡献
 
@@ -19,8 +20,12 @@
 ## 本地开发
 
 ```bash
-bun install
+bun install --frozen-lockfile
 bun run docs:dev
 ```
 
-推送到 `main` 分支后由 CI（[deploy.yml](.github/workflows/deploy.yml)）自动构建并发布到 GitHub Pages。
+使用 `package.json` 中指定的 Bun 版本。提交前运行 `bun run docs:build`，检查构建和内部页面链接；修改内容时同步维护 `docs/en/` 的英文页面。
+
+VitePress 暂用稳定版 1.6.4；通过 `overrides` 将其开发服务器依赖固定在已修复漏洞的 Vite 6.4.5 及后续 6.x 兼容版本，避免继续使用 Vite 5。升级 VitePress 时重新检查此覆盖配置。依赖审计：`bun audit --registry https://registry.npmjs.org`。
+
+PR 会由 CI（[deploy.yml](.github/workflows/deploy.yml)）构建检查；推送到 `main` 后自动构建并发布到 GitHub Pages。默认部署路径为 `/NodeFlareWiki/`，部署到域名根目录时使用 `BASE_PATH=/ bun run docs:build`。

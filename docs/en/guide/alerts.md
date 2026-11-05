@@ -31,6 +31,13 @@ Test requests are independent of automatic notification switches. If a channel f
 | Offline alert delay | 5 minutes | 2–1440 minutes |
 | Initial traffic threshold | 80% | 50–100% |
 | Expiry reminder | 7 days | 0–365 days; 0 disables expiry reminders |
+| Notification timezone | `Asia/Shanghai` | An IANA timezone, such as `UTC` or `America/Los_Angeles` |
+
+### Notification Time
+
+**Notification timezone** controls the `{{time}}` placeholder in Telegram and all Webhook templates. It defaults to Beijing time (`Asia/Shanghai`). After saving, both test messages and automatic alerts use this setting; no backend or agent OS timezone change is needed.
+
+The format is `YYYY-MM-DD HH:mm:ss`, without a timezone suffix. If a message needs a timezone label, add matching fixed text to the template. Each node's **Traffic reset timezone** controls its billing period independently.
 
 ## Telegram
 
@@ -57,7 +64,7 @@ Telegram uses a text template; Bark, Discord and the other Webhook channels each
 | `{{node}}` | Node name; alias of `{{server}}` | Webhook |
 | `{{event}}` | `offline`, `online`, `traffic`, `expiry`, `resource`, `resource_recovery` or `test` | Webhook |
 | `{{site}}` | Site name | Webhook |
-| `{{time}}` | Send time in `YYYY-MM-DD HH:mm:ss UTC` format | Telegram, Webhook |
+| `{{time}}` | Send time in the notification timezone, formatted as `YYYY-MM-DD HH:mm:ss` | Telegram, Webhook |
 
 Telegram example:
 

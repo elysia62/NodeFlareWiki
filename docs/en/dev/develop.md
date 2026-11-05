@@ -17,11 +17,40 @@ cp backend/config.example.toml backend/config.toml
 
 ## Tests and Build
 
+Run the combined checks before submitting:
+
+```bash
+bun run check
+```
+
+This covers frontend types, tests and builds, shell syntax, Rust formatting, Clippy, unit tests and dependency audits. Rust audits require `cargo-audit`; PostgreSQL-specific tests require `NODEFLARE_TEST_POSTGRES_URL`. The script reports skips when these are unavailable. Use a dedicated test database, never a production database.
+
+Individual commands are also available:
+
 ```bash
 bun test --cwd frontend
+cargo test --locked --manifest-path shared/Cargo.toml
 cargo test --locked --manifest-path backend/Cargo.toml
 cargo test --locked --manifest-path agent/Cargo.toml
 bun run build
+```
+
+## Browser and Agent Runtime Tests
+
+`e2e/` uses Playwright with `/usr/bin/chromium` by default. Chinese screenshot baselines also need CJK fonts. Start the frontend development server, then run:
+
+```bash
+bun run test:e2e:types
+bun run test:e2e
+```
+
+Live reporting cases require a running backend and agent and skip when unavailable. See `e2e/README.md` in the main repository for setup, screenshot baselines and test groups.
+
+Agent runtime tests create temporary local servers and isolated state directories to check replay after reconnecting, remote task results and recovery from stalled handshakes:
+
+```bash
+CARGO_TARGET_DIR=target/agent cargo build --locked --manifest-path agent/Cargo.toml
+MONITOR_AGENT_BINARY=target/agent/debug/nodeflare-agent node scripts/agent-runtime-test.mjs
 ```
 
 ## Smoke Test

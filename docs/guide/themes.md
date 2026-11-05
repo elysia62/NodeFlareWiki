@@ -29,7 +29,7 @@ theme.zip
 
 ## theme.json 设置表单
 
-`theme.json` 可选，用于在管理后台生成主题的**设置表单**；管理员填写的值经 [Bootstrap 接口](#get-apibootstrap) 的 `config.theme_options` 下发（键值对，未设置时为默认值）。
+`theme.json` 可选，用于在管理后台生成主题的**设置表单**；管理员填写的值经 [Bootstrap 接口](#get-api-bootstrap) 的 `config.theme_options` 下发（键值对，未设置时为默认值）。
 
 ```json
 {
@@ -93,7 +93,7 @@ theme.zip
 | `logo_url` / `background_url` | Logo 与背景图 |
 | `locale` | 界面语言（`zh-CN` / `en`） |
 | `public_dashboard` | 是否开启公开仪表盘 |
-| `offline_threshold_seconds` | 判定离线的阈值秒数（配合 `servers[].timestamp`） |
+| `offline_threshold_seconds` | 站点离线判定下限；优先使用节点的 `offline_after_seconds` |
 | `history_retention_days` | 历史数据保留天数 |
 | `theme_options` | 本主题的设置值（`theme.json` 声明的键值对） |
 | `show_search` / `show_groups` / `show_stats` / `show_assets` / `show_traffic` / `show_speed` / `show_price` / `show_expiry` / `show_latency` / `show_uptime` | 后台「显示项」开关，主题应尊重这些开关 |
@@ -105,7 +105,8 @@ theme.zip
 | --- | --- |
 | `id` / `name` | 节点 ID 与名称，`id` 用于查询历史接口 |
 | `region` / `group_name` / `tags` | 地区、分组、标签 |
-| `timestamp` | 最近一次上报时间戳（秒），配合 `offline_threshold_seconds` 判断在线 |
+| `timestamp` | 最近一次上报时间戳（秒），配合节点的 `offline_after_seconds` 判断在线 |
+| `offline_after_seconds` | 该节点的离线判定窗口：站点阈值与 3 倍实时上传间隔中的较大者；旧版本未提供时回退到站点阈值 |
 | `cpu` / `cpu_cores` / `cpu_model` | CPU 使用率与信息 |
 | `load1` / `load5` / `load15` | 负载 |
 | `mem_used` / `mem_total` / `swap_used` / `swap_total` | 内存与 Swap（字节） |
