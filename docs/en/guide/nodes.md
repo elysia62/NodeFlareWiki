@@ -21,9 +21,13 @@ The **Assets** and **Remaining value** tiles in the dashboard header are both de
 | Figure | Meaning |
 | --- | --- |
 | Assets | The prices of all paid nodes added together — what renewing everyone for one period costs |
-| Remaining value | What has been paid for but not yet consumed: the current billing period prorated by the time left, capped at one period |
+| Remaining value | Estimated service value from the period price and all remaining time, including prepaid renewals spanning multiple periods |
 
-Remaining value is prorated and capped at a single billing cycle. A node at ¥30/month with half a month left counts as about ¥15; with three months left it still counts as ¥30, because only the next period has actually been paid for. Remaining value therefore **never exceeds assets**, and the closer the two are, the further out the expiries.
+As in the Glassmorphism theme, `remaining value = period price × remaining days ÷ period days`, rounding a future partial day up. A node at ¥30 / 30 days with 15 days left counts as ¥15; after renewing ahead, 90 days left counts as ¥90. A node at ¥120 / 365 days with 730 days left counts as ¥240. **Remaining value can exceed the sum of single-period prices shown under Assets**; neither figure bounds the other.
+
+Free nodes, expired nodes and nodes without a valid expiry date contribute 0. An unexpired one-time purchase retains its full price. Expiries more than 36500 days away are treated as lifetime nodes: the card shows Lifetime and retains the full price instead of turning a permanent placeholder date into a huge estimate.
+
+This is an estimate based on the entered price and term, not a payment record, refund amount or resale price. A server start date is not required. Auto-renew only advances the panel's expiry date and does not confirm that the provider charged a payment.
 
 Multi-currency totals are converted using daily exchange rates. Nodes whose rate is missing are left out and counted next to the label.
 
