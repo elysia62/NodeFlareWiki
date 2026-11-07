@@ -29,7 +29,7 @@ Free nodes, expired nodes and nodes without a valid expiry date contribute 0. An
 
 This is an estimate based on the entered price and term, not a payment record, refund amount or resale price. A server start date is not required. Auto-renew only advances the panel's expiry date and does not confirm that the provider charged a payment.
 
-Multi-currency totals are converted using daily exchange rates. Nodes whose rate is missing are left out and counted next to the label.
+Multi-currency totals are converted using daily exchange rates. Nodes already in the display currency need no exchange rate. Other nodes whose rate is missing are left out and counted next to the label.
 
 ## Sampling and Traffic
 

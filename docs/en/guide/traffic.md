@@ -38,3 +38,5 @@ Leave **Network interface** empty for the agent's automatic selection. Comma-sep
 Use **Current upload traffic** and **Current download traffic** to correct usage in the current billing period. These offsets are added to the period's accumulated counters and do not carry over to later periods. Recheck usage after changing interfaces as well.
 
 The backend maintains cycle usage from cumulative agent counters, not by adding speeds shown in history charts. Aggregation and retention settings therefore do not control resets. Interface changes, reboots and the initial baseline may differ from the provider's accounting; initial registration does not fetch this month's usage from your provider.
+
+On first enrollment, counters establish a baseline and cycle usage starts at 0. Subsequent observed increments are accumulated. Use traffic corrections to include prior usage confirmed by your provider. This rule does not retroactively rewrite existing nodes' accumulated history.
