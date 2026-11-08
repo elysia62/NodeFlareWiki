@@ -16,14 +16,14 @@ Drag a row's handle to change display order. IP addresses appear in the admin se
 
 ### Asset figures on the dashboard
 
-The **Assets** and **Remaining value** tiles in the dashboard header are both derived from the price, billing cycle and expiry date above, but they measure different things:
+The dashboard shows **Remaining value** as the main amount, with **Period prices** underneath. They measure different things:
 
 | Figure | Meaning |
 | --- | --- |
-| Assets | The prices of all paid nodes added together — what renewing everyone for one period costs |
 | Remaining value | Estimated service value from the period price and all remaining time, including prepaid renewals spanning multiple periods |
+| Period prices | Sum of each paid node’s entered price for its own billing cycle, including monthly, yearly and one-time prices; not total payments or monthly cost |
 
-As in the Glassmorphism theme, `remaining value = period price × remaining days ÷ period days`, rounding a future partial day up. A node at ¥30 / 30 days with 15 days left counts as ¥15; after renewing ahead, 90 days left counts as ¥90. A node at ¥120 / 365 days with 730 days left counts as ¥240. **Remaining value can exceed the sum of single-period prices shown under Assets**; neither figure bounds the other.
+As in the Glassmorphism theme, `remaining value = period price × remaining days ÷ period days`, rounding a future partial day up. A node at ¥30 / 30 days with 15 days left counts as ¥15; after renewing ahead, 90 days left counts as ¥90. A node at ¥120 / 365 days with 730 days left counts as ¥240. Remaining value can exceed the sum of period prices; that sum does not cap remaining value. Earlier versions called the period-price sum “Assets”, which could be mistaken for total spending.
 
 Free nodes, expired nodes and nodes without a valid expiry date contribute 0. An unexpired one-time purchase retains its full price. Expiries more than 36500 days away are treated as lifetime nodes: the card shows Lifetime and retains the full price instead of turning a permanent placeholder date into a huge estimate.
 
