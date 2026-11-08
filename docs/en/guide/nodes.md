@@ -16,16 +16,18 @@ Drag a row's handle to change display order. IP addresses appear in the admin se
 
 ### Asset figures on the dashboard
 
-The dashboard shows **Remaining value** as the main amount, with **Period prices** underneath. They measure different things:
+The dashboard shows **Remaining value** as the main amount, with **Monthly cost** underneath. They measure different things:
 
 | Figure | Meaning |
 | --- | --- |
 | Remaining value | Estimated service value from the period price and all remaining time, including prepaid renewals spanning multiple periods |
-| Period prices | Sum of each paid node’s entered price for its own billing cycle, including monthly, yearly and one-time prices; not total payments or monthly cost |
+| Monthly cost | Sum of period prices normalized to 30 days, excluding one-time charges and free nodes |
 
-As in the Glassmorphism theme, `remaining value = period price × remaining days ÷ period days`, rounding a future partial day up. A node at ¥30 / 30 days with 15 days left counts as ¥15; after renewing ahead, 90 days left counts as ¥90. A node at ¥120 / 365 days with 730 days left counts as ¥240. Remaining value can exceed the sum of period prices; that sum does not cap remaining value. Earlier versions called the period-price sum “Assets”, which could be mistaken for total spending.
+As in the Glassmorphism theme, `remaining value = period price × remaining days ÷ period days`, rounding a future partial day up. A node at ¥30 / 30 days with 15 days left counts as ¥15; after renewing ahead, 90 days left counts as ¥90. A node at ¥120 / 365 days with 730 days left counts as ¥240. Remaining value can exceed monthly cost; neither figure bounds the other.
 
-Free nodes, expired nodes and nodes without a valid expiry date contribute 0. An unexpired one-time purchase retains its full price. Expiries more than 36500 days away are treated as lifetime nodes: the card shows Lifetime and retains the full price instead of turning a permanent placeholder date into a huge estimate.
+Monthly cost uses `period price × 30 ÷ period days`, then converts and sums the results in the display currency. For example, ¥36 / 30 days counts as ¥36, ¥90 / 90 days as ¥30, and ¥120 / 365 days as about ¥9.86. It estimates the configured cost of the listed nodes regardless of online or expiry status, rather than actual charges this calendar month.
+
+For remaining value, free nodes, expired nodes and nodes without a valid expiry date contribute 0. An unexpired one-time purchase retains its full price. Expiries more than 36500 days away are treated as lifetime nodes: the card shows Lifetime and retains the full price instead of turning a permanent placeholder date into a huge estimate.
 
 This is an estimate based on the entered price and term, not a payment record, refund amount or resale price. A server start date is not required. Auto-renew only advances the panel's expiry date and does not confirm that the provider charged a payment.
 
