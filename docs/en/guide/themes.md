@@ -13,7 +13,7 @@ theme.zip
 ```
 
 - `index.html` must sit at the root of the ZIP; if every file lives inside a single top-level directory (e.g. `ocean/index.html`), that directory is used as the root automatically.
-- Reference assets with absolute paths like `"/assets/xxx` (or `'/assets/xxx`) in `index.html`; the server rewrites the prefix to the actual theme path (`/__theme-active/…`, or `/__theme-preview/…` while previewing), so themes don't need to know deployment details.
+- Reference assets using `/assets/xxx`, `./assets/xxx` or `assets/xxx` in `index.html`; the server rewrites the prefix to the actual theme path (`/__theme-active/…`, or `/__theme-preview/…` while previewing), so themes don't need to know deployment details.
 
 Size and count limits:
 
@@ -26,6 +26,21 @@ Size and count limits:
 | Total extracted size | 128 MiB |
 
 Other constraints: symlinks and special files are rejected; `__MACOSX` directories and `.DS_Store` files are ignored.
+
+## Runtime isolation and compatibility
+
+Third-party themes and previews run in an iframe with an opaque origin. The trusted host handles sign-in and Cloudflare verification. A read-only bridge exposes public dashboard data available to the current visitor; it does not forward administrator API access. Theme HTML and SVG resources also receive a server-enforced sandbox when opened directly.
+
+- Use `fetch` for the GET APIs documented below, with `hours` for history queries. Connect `WebSocket` to `/api/ws`, optionally with `server_id`; the only supported outbound message is the `ping` heartbeat.
+- Include module scripts, styles and fonts in the theme package. Use external script files and the asset paths described above. XMLHttpRequest, arbitrary external data requests, admin APIs, form submission and top-level navigation are not available.
+- `localStorage` and `sessionStorage` are temporary stores inside the current iframe and reset on reload. Use `theme.json` and `config.theme_options` for persistent settings.
+- The host supplies the admin link. Preview updated themes before activation to check their API use, navigation and preferences.
+
+Inside the theme, `location.pathname` retains `/` or `/instance/{id}`. Plain detail links and `history.pushState` / `history.replaceState` request validated navigation from the host; themes can also call `window.NodeFlareTheme.navigate('/instance/' + id)`. Navigation reloads the theme. The host manages the address bar, back/forward navigation and preview paths. Avoid `location.assign()` and top-level navigation. See the repository's [theme bridge documentation](https://github.com/elysia62/NodeFlare/blob/main/docs/theme-bridge.md) for the protocol and examples.
+
+The sandbox isolates administrator privileges; it does not guarantee that themes cannot send data externally. HTTPS images and CSS background images are allowed for logos and backgrounds. Themes could encode dashboard data they have read in image URLs, including data available after signing into a private dashboard. Install only trusted themes.
+
+Public node data includes disk device names, mount points and probe targets. Turning off a display option does not remove fields from the API; hide the node or disable the public dashboard if these details should stay private.
 
 ## theme.json Settings Form
 

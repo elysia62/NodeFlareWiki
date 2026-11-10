@@ -55,3 +55,11 @@ Updates also preserve existing remote execution permission. After an update, che
 ## Connection and Reporting Problems
 
 A running process does not confirm delivery. The agent reconnects automatically and attempts to replay unconfirmed samples, but long outages can discard older data when queues fill. For connection timeouts, handshake errors, missing acknowledgements or continued outages after a restart, follow [Agent Troubleshooting](/en/guide/troubleshooting).
+
+## Resetting Agent credentials
+
+**Reset Agent credentials** is a separate node-list action protected by a password or TOTP check. It revokes the node's primary credential and every previous installation credential, then disconnects the current Agent. Reconfigure the Agent using the new installation command shown afterward; `--update` preserves the old credential and does not perform this replacement.
+
+Generating an ordinary installation command does not revoke existing credentials. Installation tokens also authenticate ongoing reports and have no automatic expiry; use the explicit reset action if one is compromised.
+
+The Agent validates samples before storing them locally. The server accepts valid samples independently and tells newer Agents to remove rejected samples from their memory and disk queues. Rejection does not count as persistence. An unavailable `ping` command produces a diagnostic and skips the measurement instead of reporting target packet loss.

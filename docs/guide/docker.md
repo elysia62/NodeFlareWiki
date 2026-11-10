@@ -124,3 +124,9 @@ docker rm -f nodeflare    # docker run 部署
 ```bash
 sudo rm -rf /etc/nodeflare
 ```
+
+## 容器健康检查
+
+镜像自带 `HEALTHCHECK`，每 30 秒调用 `nodeflare --check-container`，启动宽限 60 秒，连续失败 3 次标记为 unhealthy。检查通过可执行文件识别实际服务进程，读取其 `--config` / `--bind` 参数，并通过本机看板接口验证服务响应，兼容 `docker run --init`、自定义端口和私有看板。
+
+数据库维护可能短暂导致检查失败。Docker 的健康状态本身不会自动重启容器。若同一个容器中运行多个 NodeFlare 服务进程，请显式配置 `nodeflare --check-ready --config … --bind …`，避免检查到错误实例。

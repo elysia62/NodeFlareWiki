@@ -33,9 +33,15 @@ One-click backup / restore (ZIP). Backups contain settings, nodes, history, noti
 
 Keep a copy on another machine and periodically test recovery in an isolated environment. Database backups do not replace copies of the config file, proxy certificates or system service definitions when moving hosts.
 
-Backups include Telegram and Webhook configuration, including secrets in URLs, headers and request bodies. Write-only fields in the UI do not remove credentials from backups. Do not share backups publicly; after restoring, send a test from notification settings to verify each channel.
+Backups include administrator password derivation parameters and verification hashes, enabled TOTP seeds, and primary node credential hashes. They also include Telegram and Webhook configuration, including secrets in URLs, headers and request bodies. Write-only fields in the UI do not remove credentials from backups. Do not share backups publicly; after restoring, send a test from notification settings to verify each channel.
 
-Exported backups omit admin sessions, temporary agent install tokens and per-channel delivery receipts. Pending notifications are included and may be redelivered after restoring. SQLite ↔ PostgreSQL online migration preserves receipts so recorded successful channels are not resent.
+Exported backups omit admin sessions, additional agent installation tokens and per-channel delivery receipts. Pending notifications are included and may be redelivered after restoring. SQLite ↔ PostgreSQL online migration preserves receipts so recorded successful channels are not resent.
+
+Authenticated restore uploads stream to a temporary file, with one maintenance upload at a time and a five-minute upload timeout. Dashboard reads remain available during upload; replacing data briefly enters maintenance. Reserve disk space for the ZIP and extracted files.
+
+New maintenance requests return busy when another operation is active. A request also gives up starting maintenance if existing database reads or writes take more than 30 seconds to drain. Once backup, restore or migration starts, it continues to completion; closing the page does not release the maintenance lock early.
+
+The current backup format omits additional installation tokens; Agents using those tokens need a new installation command after restoring. Online database migration preserves these tokens.
 
 Limits:
 

@@ -66,3 +66,7 @@ Linux / macOS / FreeBSD 脚本使用 `--disable-remote`；Windows 安装脚本�
 ## 删除节点
 
 删除前先导出[数据库备份](/guide/database)。删除节点会清理其关联监控数据，无法直接撤销；这不会卸载机器上的 Agent，仍需在机器上运行[卸载命令](/guide/uninstall)。
+
+## 管理 API 更新约定
+
+`PATCH /api/admin/servers/{id}` 目前接收完整的节点配置 `ServerInput`，不是仅修改请求中出现的字段。自行编写管理脚本时，保留全部配置后提交；不要只发送单个字段，以免校验失败或把省略项恢复为默认值。后台页面已按完整配置提交。

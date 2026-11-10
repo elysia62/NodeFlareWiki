@@ -66,3 +66,7 @@ Saving the checkbox alone does not change a running agent's permission. Commands
 ## Deleting Nodes
 
 Export a [database backup](/en/guide/database) first. Deleting a node also removes its associated monitoring data and cannot be directly undone. It does not uninstall the agent on that machine; run the [uninstall command](/en/guide/uninstall) separately.
+
+## Admin API update contract
+
+`PATCH /api/admin/servers/{id}` currently accepts the complete `ServerInput` configuration, rather than updating only fields present in the request. Management scripts should preserve and submit the full configuration; sending a single field may fail validation or reset omitted fields to defaults. The admin UI already submits the complete configuration.

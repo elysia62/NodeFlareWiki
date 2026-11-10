@@ -125,3 +125,9 @@ Once confirmed, delete the data directory manually:
 ```bash
 sudo rm -rf /etc/nodeflare
 ```
+
+## Container healthcheck
+
+The image runs `nodeflare --check-container` every 30 seconds, with a 60-second startup grace period and three failures before marking the container unhealthy. It identifies the running server by its executable, reads its actual `--config` and `--bind` arguments, and verifies the local dashboard HTTP response. This supports `docker run --init`, custom ports and private dashboards.
+
+Database maintenance can temporarily fail the check. Docker health status does not itself restart a container. If several NodeFlare servers run inside one container, configure an explicit `nodeflare --check-ready --config … --bind …` probe to select the intended instance.

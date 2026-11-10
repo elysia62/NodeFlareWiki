@@ -13,7 +13,7 @@ theme.zip
 ```
 
 - `index.html` 必须位于 ZIP 根目录；全部文件都在同一顶层目录内时（如 `ocean/index.html`），安装时会自动以该目录为根。
-- 在 `index.html` 中用 `"/assets/xxx`（或 `'/assets/xxx`）绝对路径引用资源；服务端会自动把前缀重写到实际主题路径（`/__theme-active/…`，预览时为 `/__theme-preview/…`），无需关心部署细节。
+- 在 `index.html` 中用 `/assets/xxx`、`./assets/xxx` 或 `assets/xxx` 引用资源；服务端会自动把前缀重写到实际主题路径（`/__theme-active/…`，预览时为 `/__theme-preview/…`），无需关心部署细节。
 
 大小与数量限制：
 
@@ -26,6 +26,21 @@ theme.zip
 | 解压后总量 | 128 MiB |
 
 其他约束：不允许符号链接等特殊文件；`__MACOSX` 目录与 `.DS_Store` 会被忽略。
+
+## 运行隔离与兼容性
+
+第三方主题及预览在不透明源的沙箱 iframe 中运行。登录与 Cloudflare 验证由外层看板完成；主题只能经只读通道取得当前访问者有权查看的公开数据，不能借用管理员会话调用后台接口。直接打开主题 HTML 或 SVG 资源也会受到服务端沙箱限制。
+
+- 数据请求使用 `fetch`：支持本页列出的四类 GET 接口，历史请求可带 `hours`。实时数据使用 `WebSocket` 连接 `/api/ws`，可带 `server_id`，发送消息仅支持心跳 `ping`。
+- 模块脚本、样式、字体等应随主题包提供；脚本使用外部文件，资源路径遵守上文约定。`XMLHttpRequest`、任意外部数据请求、后台 API、表单提交和顶层页面跳转不在主题权限内。
+- `localStorage` / `sessionStorage` 为当前 iframe 内的临时存储，刷新后清空。需要持久保存的主题设置请使用 `theme.json` 与 `config.theme_options`。
+- 管理入口由外层看板提供。升级主题时先通过后台预览，检查数据请求、导航和偏好设置是否符合这些约束。
+
+主题内的 `location.pathname` 保留 `/` 或 `/instance/{id}`。普通详情链接及 `history.pushState` / `history.replaceState` 会交由宿主校验后跳转，也可调用 `window.NodeFlareTheme.navigate('/instance/' + id)`。跳转重新加载主题，宿主处理地址栏、前进后退与预览路径。不要使用 `location.assign()` 或顶层跳转；完整协议、限制与示例见仓库内的[主题桥接文档](https://github.com/elysia62/NodeFlare/blob/main/docs/theme-bridge.md)。
+
+沙箱隔离管理权限，但不保证主题无法外发数据。为兼容 Logo 和背景图，允许 HTTPS 图片与 CSS 背景图片；主题可能通过图片 URL 发送它已读到的看板数据，包括私有看板登录后允许查看的数据。请只安装可信主题。
+
+公开节点的磁盘设备名、挂载点和拨测目标也是展示数据的一部分。关闭某个显示项不等于从 API 中删除字段；不希望公开这些信息时，应隐藏节点或关闭公开看板。
 
 ## theme.json 设置表单
 
